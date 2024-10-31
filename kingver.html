@@ -91,7 +91,7 @@
     </style>
 </head>
 <body>
-    <h1>ALMACEN KINGVER</h1>
+    <h1 id="title">Título del Producto</h1>
     <div id="reader"></div>
     <button id="startButton">Escanear Código QR</button>
     <p id="loading">Cargando...</p>
@@ -144,12 +144,18 @@
                 document.getElementById("costo").innerText = product["COSTO UNITARIO"];
                 document.getElementById("categoria").innerText = product["CATEGORIA"];
                 document.getElementById("total").innerText = product["TOTAL"];
+                
+                // Mostrar solo la tabla y el botón de escaneo
                 document.getElementById("productTable").style.display = "table";
+                document.getElementById("title").style.display = "none";
+                document.getElementById("reader").style.display = "none";
+                document.querySelector(".custom-file-upload").style.display = "none";
+                document.getElementById("fileInput").style.display = "none";
+                document.getElementById("loading").style.display = "none";
             } else {
                 alert("Producto no encontrado.");
                 document.getElementById("productTable").style.display = "none";
             }
-            document.getElementById("loading").style.display = "none";
         }
 
         document.getElementById("startButton").addEventListener("click", function() {
