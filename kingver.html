@@ -88,36 +88,17 @@
         #productTable th {
             background-color: #2980b9;
         }
-        .backButton {
-            padding: 12px 24px;
-            font-size: 1em;
-            color: #fff;
-            background-color: #c0392b;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            margin-top: 15px;
-        }
-        .backButton:hover {
-            background-color: #e74c3c;
-        }
-        .product-info-title {
-            font-size: 1.5em;
-            color: #ffffff;
-            margin: 20px 0;
-        }
     </style>
 </head>
 <body>
-    <h1 id="title">ALMACEN KINGVER</h1>
+    <h1 id="title">Título del Producto</h1>
     <div id="reader"></div>
+    <button id="startButton">Escanear Código QR</button>
     <p id="loading">Cargando...</p>
     <label for="fileInput" class="custom-file-upload">Seleccionar Archivo</label>
     <input type="file" id="fileInput" />
     
     <!-- Tabla para mostrar la información del producto -->
-    <div class="product-info-title" style="display: none;" id="infoTitle">Información del Producto</div>
     <table id="productTable" style="display: none;">
         <tr><th>Campo</th><th>Información</th></tr>
         <tr><td>Nombre del Producto</td><td id="nombre"></td></tr>
@@ -129,8 +110,6 @@
         <tr><td>Categoría</td><td id="categoria"></td></tr>
         <tr><td>Total</td><td id="total"></td></tr>
     </table>
-
-    <button id="backButton" class="backButton" style="display: none;">Regresar</button>
 
     <script>
     document.addEventListener("DOMContentLoaded", function() {
@@ -166,55 +145,34 @@
                 document.getElementById("categoria").innerText = product["CATEGORIA"];
                 document.getElementById("total").innerText = product["TOTAL"];
                 
-                // Mostrar solo la tabla y el botón de regresar
+                // Mostrar solo la tabla y el botón de escaneo
                 document.getElementById("productTable").style.display = "table";
-                document.getElementById("infoTitle").style.display = "block"; // Show the title
                 document.getElementById("title").style.display = "none";
                 document.getElementById("reader").style.display = "none";
                 document.querySelector(".custom-file-upload").style.display = "none";
                 document.getElementById("fileInput").style.display = "none";
                 document.getElementById("loading").style.display = "none";
-                document.getElementById("backButton").style.display = "inline-block"; // Show the back button
             } else {
                 alert("Producto no encontrado.");
                 document.getElementById("productTable").style.display = "none";
-                document.getElementById("infoTitle").style.display = "none"; // Hide the title
-                document.getElementById("backButton").style.display = "none"; // Hide the back button
             }
         }
 
-        document.getElementById("backButton").addEventListener("click", function() {
-            // Reset the interface to the initial state
-            document.getElementById("productTable").style.display = "none";
-            document.getElementById("infoTitle").style.display = "none"; // Hide the title
-            document.getElementById("title").style.display = "block";
-            document.getElementById("reader").style.display = "block";
-            document.querySelector(".custom-file-upload").style.display = "inline-block";
-            document.getElementById("fileInput").style.display = "inline-block";
-            document.getElementById("backButton").style.display = "none"; // Hide the back button
-            excelData = []; // Clear excel data
-        });
-
         document.getElementById("startButton").addEventListener("click", function() {
             document.getElementById("loading").style.display = "block";
-            this.disabled = true; // Disable button during scanning
             html5QrCode.start(
                 { facingMode: "environment" },
                 { fps: 10, qrbox: 250 },
                 qrCodeMessage => {
                     searchProduct(qrCodeMessage);
-                    html5QrCode.stop().then(() => {
-                        this.disabled = false; // Re-enable button after scanning
-                    });
+                    html5QrCode.stop();
                 },
                 errorMessage => {
                     console.error("Error en el escaneo", errorMessage);
-                    // Optionally provide feedback to the user
                 }
             ).catch(err => {
                 console.error(`Error al iniciar el escáner: ${err}`);
                 document.getElementById("loading").style.display = "none";
-                this.disabled = false; // Re-enable button on error
             });
         });
     });
