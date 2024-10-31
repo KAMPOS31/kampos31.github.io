@@ -159,6 +159,7 @@
                 document.getElementById("total").innerText = product["TOTAL"];
                 
                 // Mostrar la tabla y el título
+                document.getElementById("startButton").style.display = "none";
                 document.getElementById("productTable").style.display = "table";
                 document.getElementById("infoTitle").style.display = "block"; // Show info title
                 document.getElementById("title").style.display = "none";
@@ -200,7 +201,7 @@
             document.getElementById("title").style.display = "block";
             document.getElementById("reader").style.display = "block";
             document.querySelector(".custom-file-upload").style.display = "inline-block";
-            document.getElementById("fileInput").style.display = "inline-block";
+            document.getElementById("fileInput").style.display = "none";
             document.getElementById("loading").style.display = "none";
             document.getElementById("backButton").style.display = "none"; // Hide back button
         });
