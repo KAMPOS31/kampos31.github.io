@@ -34,7 +34,7 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             background-color: #ecf0f1;
         }
-        #startButton {
+        #startButton, #backButton {
             padding: 12px 24px;
             font-size: 1em;
             color: #fff;
@@ -45,7 +45,7 @@
             transition: background-color 0.3s ease;
             margin-top: 15px;
         }
-        #startButton:hover {
+        #startButton:hover, #backButton:hover {
             background-color: #3498db;
         }
         #loading {
@@ -77,6 +77,7 @@
             max-width: 600px;
             border-collapse: collapse;
             color: #ffffff;
+            display: none; /* Hide by default */
         }
         #productTable, #productTable th, #productTable td {
             border: 1px solid #ffffff;
@@ -88,6 +89,12 @@
         #productTable th {
             background-color: #2980b9;
         }
+        #infoTitle {
+            display: none; /* Hide by default */
+            font-size: 1.5em;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -98,8 +105,11 @@
     <label for="fileInput" class="custom-file-upload">Seleccionar Archivo</label>
     <input type="file" id="fileInput" />
     
+    <!-- Título de información del producto -->
+    <div id="infoTitle">Información del Producto</div>
+
     <!-- Tabla para mostrar la información del producto -->
-    <table id="productTable" style="display: none;">
+    <table id="productTable">
         <tr><th>Campo</th><th>Información</th></tr>
         <tr><td>Nombre del Producto</td><td id="nombre"></td></tr>
         <tr><td>Descripción</td><td id="descripcion"></td></tr>
@@ -110,6 +120,9 @@
         <tr><td>Categoría</td><td id="categoria"></td></tr>
         <tr><td>Total</td><td id="total"></td></tr>
     </table>
+
+    <!-- Botón para regresar -->
+    <button id="backButton" style="display: none;">Regresar</button>
 
     <script>
     document.addEventListener("DOMContentLoaded", function() {
@@ -145,16 +158,20 @@
                 document.getElementById("categoria").innerText = product["CATEGORIA"];
                 document.getElementById("total").innerText = product["TOTAL"];
                 
-                // Mostrar solo la tabla y el botón de escaneo
+                // Mostrar la tabla y el título
                 document.getElementById("productTable").style.display = "table";
+                document.getElementById("infoTitle").style.display = "block"; // Show info title
                 document.getElementById("title").style.display = "none";
                 document.getElementById("reader").style.display = "none";
                 document.querySelector(".custom-file-upload").style.display = "none";
                 document.getElementById("fileInput").style.display = "none";
                 document.getElementById("loading").style.display = "none";
+                document.getElementById("backButton").style.display = "block"; // Show back button
             } else {
                 alert("Producto no encontrado.");
                 document.getElementById("productTable").style.display = "none";
+                document.getElementById("infoTitle").style.display = "none"; // Hide info title
+                document.getElementById("backButton").style.display = "none"; // Hide back button
             }
         }
 
@@ -174,6 +191,18 @@
                 console.error(`Error al iniciar el escáner: ${err}`);
                 document.getElementById("loading").style.display = "none";
             });
+        });
+
+        document.getElementById("backButton").addEventListener("click", function() {
+            // Reset the interface to the initial state
+            document.getElementById("productTable").style.display = "none";
+            document.getElementById("infoTitle").style.display = "none"; // Hide info title
+            document.getElementById("title").style.display = "block";
+            document.getElementById("reader").style.display = "block";
+            document.querySelector(".custom-file-upload").style.display = "inline-block";
+            document.getElementById("fileInput").style.display = "inline-block";
+            document.getElementById("loading").style.display = "none";
+            document.getElementById("backButton").style.display = "none"; // Hide back button
         });
     });
     </script>
