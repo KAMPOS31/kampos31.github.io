@@ -7,11 +7,19 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
     <style>
+        :root {
+            --primary-color: #6200ee;
+            --secondary-color: #03dac6;
+            --background-color: #f5f5f5;
+            --surface-color: #ffffff;
+            --text-color: #000000;
+            --shadow-color: rgba(0, 0, 0, 0.2);
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #3498db, #8e44ad);
-            color: #333;
-            text-align: center;
+            font-family: "Roboto", Arial, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
             margin: 0;
             padding: 0;
             display: flex;
@@ -20,96 +28,90 @@
             justify-content: center;
             min-height: 100vh;
         }
+
         h1 {
-            font-size: 2em;
-            color: #ffffff;
-            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+            font-size: 2.5em;
+            color: var(--primary-color);
+            margin-bottom: 20px;
         }
+
         #reader {
             width: 300px;
             height: 300px;
-            margin: 20px auto;
-            border: 2px solid #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            background-color: #ecf0f1;
+            margin: 20px 0;
+            border-radius: 20px;
+            background-color: var(--surface-color);
+            box-shadow: 0 4px 8px var(--shadow-color);
         }
-        #startButton, #backButton {
+
+        button, .custom-file-upload {
             padding: 12px 24px;
             font-size: 1em;
-            color: #fff;
-            background-color: #2980b9;
+            color: var(--surface-color);
+            background-color: var(--primary-color);
             border: none;
-            border-radius: 5px;
+            border-radius: 20px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
-            margin-top: 15px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px var(--shadow-color);
         }
-        #startButton:hover, #backButton:hover {
-            background-color: #3498db;
+
+        button:hover, .custom-file-upload:hover {
+            background-color: var(--secondary-color);
+            box-shadow: 0 4px 8px var(--shadow-color);
         }
+
         #loading {
             display: none;
-            color: #ffffff;
+            color: var(--primary-color);
             margin-top: 15px;
+            font-size: 1.1em;
         }
-        #fileInput {
-            display: none;
-        }
-        .custom-file-upload {
-            padding: 12px 24px;
-            font-size: 1em;
-            color: #fff;
-            background-color: #2980b9;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            margin-top: 15px;
-            display: inline-block;
-        }
-        .custom-file-upload:hover {
-            background-color: #3498db;
-        }
+
         #productTable {
             margin-top: 20px;
-            width: 80%;
+            width: 90%;
             max-width: 600px;
             border-collapse: collapse;
-            color: #ffffff;
-            display: none; /* Hide by default */
+            color: var(--text-color);
+            background-color: var(--surface-color);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px var(--shadow-color);
         }
-        #productTable, #productTable th, #productTable td {
-            border: 1px solid #ffffff;
-        }
+
         #productTable th, #productTable td {
-            padding: 8px;
+            padding: 12px;
             text-align: left;
+            border-bottom: 1px solid var(--shadow-color);
         }
+
         #productTable th {
-            background-color: #2980b9;
+            background-color: var(--primary-color);
+            color: var(--surface-color);
         }
+
         #infoTitle {
-            display: none; /* Hide by default */
             font-size: 1.5em;
-            color: #ffffff;
+            color: var(--primary-color);
             margin-bottom: 10px;
+        }
+
+        input[type="file"] {
+            display: none;
         }
     </style>
 </head>
 <body>
-    <h1 id="title">ALMACEN KINGVER</h1>
+    <h1>Almacén Kingver</h1>
     <div id="reader"></div>
     <button id="startButton">Escanear Código QR</button>
     <p id="loading">Cargando...</p>
     <label for="fileInput" class="custom-file-upload">Seleccionar Archivo</label>
     <input type="file" id="fileInput" />
-    
-    <!-- Título de información del producto -->
-    <div id="infoTitle">Información del Producto</div>
 
-    <!-- Tabla para mostrar la información del producto -->
-    <table id="productTable">
+    <div id="infoTitle" style="display: none;">Información del Producto</div>
+    <table id="productTable" style="display: none;">
         <tr><th>Campo</th><th>Información</th></tr>
         <tr><td>Nombre del Producto</td><td id="nombre"></td></tr>
         <tr><td>Descripción</td><td id="descripcion"></td></tr>
@@ -120,93 +122,72 @@
         <tr><td>Categoría</td><td id="categoria"></td></tr>
         <tr><td>Total</td><td id="total"></td></tr>
     </table>
-
-    <!-- Botón para regresar -->
     <button id="backButton" style="display: none;">Regresar</button>
 
     <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const html5QrCode = new Html5Qrcode("reader");
-        let excelData = [];
+        document.addEventListener("DOMContentLoaded", function () {
+            const html5QrCode = new Html5Qrcode("reader");
+            let excelData = [];
 
-        document.getElementById("loading").style.display = "none";
+            document.getElementById("fileInput").addEventListener("change", function (event) {
+                const file = event.target.files[0];
+                const reader = new FileReader();
 
-        document.getElementById("fileInput").addEventListener("change", function(event) {
-            const file = event.target.files[0];
-            const reader = new FileReader();
+                reader.onload = function (e) {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: "array" });
+                    const sheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[sheetName];
+                    excelData = XLSX.utils.sheet_to_json(worksheet);
+                };
 
-            reader.onload = function(e) {
-                const data = new Uint8Array(e.target.result);
-                const workbook = XLSX.read(data, { type: "array" });
-                const sheetName = workbook.SheetNames[0];
-                const worksheet = workbook.Sheets[sheetName];
-                excelData = XLSX.utils.sheet_to_json(worksheet);
-            };
+                reader.readAsArrayBuffer(file);
+            });
 
-            reader.readAsArrayBuffer(file);
-        });
+            function searchProduct(qrCode) {
+                const product = excelData.find(item => item["CODIGO"] === qrCode);
+                if (product) {
+                    document.getElementById("nombre").innerText = product["ARTICULO"];
+                    document.getElementById("descripcion").innerText = product["DESCRIPCION"];
+                    document.getElementById("proveedor").innerText = product["PROVEEDOR"];
+                    document.getElementById("unidad").innerText = product["UNIDAD"];
+                    document.getElementById("cantidad").innerText = product["CANTIDAD"];
+                    document.getElementById("costo").innerText = product["COSTO UNITARIO"];
+                    document.getElementById("categoria").innerText = product["CATEGORIA"];
+                    document.getElementById("total").innerText = product["TOTAL"];
 
-        function searchProduct(qrCode) {
-            const product = excelData.find(item => item["CODIGO"] === qrCode);
-            if (product) {
-                document.getElementById("nombre").innerText = product["ARTICULO"];
-                document.getElementById("descripcion").innerText = product["DESCRIPCION"];
-                document.getElementById("proveedor").innerText = product["PROVEEDOR"];
-                document.getElementById("unidad").innerText = product["UNIDAD"];
-                document.getElementById("cantidad").innerText = product["CANTIDAD"];
-                document.getElementById("costo").innerText = product["COSTO UNITARIO"];
-                document.getElementById("categoria").innerText = product["CATEGORIA"];
-                document.getElementById("total").innerText = product["TOTAL"];
-                
-                // Mostrar la tabla y el título
-                document.getElementById("startButton").style.display = "none";
-                document.getElementById("productTable").style.display = "table";
-                document.getElementById("infoTitle").style.display = "block"; // Show info title
-                document.getElementById("title").style.display = "none";
-                document.getElementById("reader").style.display = "none";
-                document.querySelector(".custom-file-upload").style.display = "none";
-                document.getElementById("fileInput").style.display = "none";
-                document.getElementById("loading").style.display = "none";
-                document.getElementById("backButton").style.display = "block"; // Show back button
-            } else {
-                alert("Producto no encontrado.");
-                document.getElementById("productTable").style.display = "none";
-                document.getElementById("infoTitle").style.display = "none"; // Hide info title
-                document.getElementById("backButton").style.display = "none"; // Hide back button
-            }
-        }
-
-        document.getElementById("startButton").addEventListener("click", function() {
-            document.getElementById("loading").style.display = "block";
-            html5QrCode.start(
-                { facingMode: "environment" },
-                { fps: 10, qrbox: 250 },
-                qrCodeMessage => {
-                    searchProduct(qrCodeMessage);
-                    html5QrCode.stop();
-                },
-                errorMessage => {
-                    console.error("Error en el escaneo", errorMessage);
+                    document.getElementById("startButton").style.display = "none";
+                    document.getElementById("productTable").style.display = "table";
+                    document.getElementById("infoTitle").style.display = "block";
+                    document.getElementById("reader").style.display = "none";
+                    document.querySelector(".custom-file-upload").style.display = "none";
+                } else {
+                    alert("Producto no encontrado.");
                 }
-            ).catch(err => {
-                console.error(`Error al iniciar el escáner: ${err}`);
-                document.getElementById("loading").style.display = "none";
+            }
+
+            document.getElementById("startButton").addEventListener("click", function () {
+                html5QrCode.start(
+                    { facingMode: "environment" },
+                    { fps: 10, qrbox: 250 },
+                    qrCodeMessage => {
+                        searchProduct(qrCodeMessage);
+                        html5QrCode.stop();
+                    },
+                    errorMessage => {
+                        console.error("Error en el escaneo", errorMessage);
+                    }
+                );
+            });
+
+            document.getElementById("backButton").addEventListener("click", function () {
+                document.getElementById("productTable").style.display = "none";
+                document.getElementById("infoTitle").style.display = "none";
+                document.getElementById("startButton").style.display = "block";
+                document.getElementById("reader").style.display = "block";
+                document.querySelector(".custom-file-upload").style.display = "inline-block";
             });
         });
-
-        document.getElementById("backButton").addEventListener("click", function() {
-            // Reset the interface to the initial state
-            document.getElementById("productTable").style.display = "none";
-            document.getElementById("infoTitle").style.display = "none"; // Hide info title
-            document.getElementById("title").style.display = "block";
-            document.getElementById("reader").style.display = "block";
-            document.querySelector(".custom-file-upload").style.display = "none";
-            document.getElementById("fileInput").style.display = "none";
-            document.getElementById("loading").style.display = "none";
-             document.getElementById("startButton").style.display = "block";
-            document.getElementById("backButton").style.display = "none"; // Hide back button
-        });
-    });
     </script>
 </body>
 </html>
