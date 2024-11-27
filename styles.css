@@ -100,11 +100,13 @@
         #backButton {
             background-color: #e74c3c;
         }
-
+        #startButton {
+            background-color: #05abf2;
+        }
         #backButton:hover {
             background-color: #ff7675;
         }
-
+       
         /* Loading */
         #loading {
             font-size: 1em;
