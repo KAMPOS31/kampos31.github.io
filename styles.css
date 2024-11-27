@@ -81,7 +81,7 @@
             padding: 14px 28px;
             font-size: 1em;
             color: #fff;
-            background-color: #00008B;
+            background-color: #59b83e;
             border: none;
             border-radius: 6px;
             cursor: pointer;
@@ -90,7 +90,7 @@
         }
 
         button:hover, .custom-file-upload:hover {
-            background-color: #87CEFA;
+            background-color: #a5f58e;
         }
 
         .custom-file-upload {
