@@ -241,9 +241,7 @@
                 toggleView(true);
             } else {
                 showMessage("Producto no encontrado.");
-                document.getElementById("productTable").style.display = "none";
-        document.getElementById("infoTitle").style.display = "none"; // Hide info title
-        document.getElementById("backButton").style.display = "none"; // Hide back button
+                toggleView(false);
             }
         }
 
