@@ -60,7 +60,7 @@
             padding: 14px 28px;
             font-size: 1em;
             color: #fff;
-            background-color: #006400;
+            background-color: #00008B;
             border: none;
             border-radius: 6px;
             cursor: pointer;
@@ -69,7 +69,7 @@
         }
 
         button:hover, .custom-file-upload:hover {
-            background-color: #90EE90;
+            background-color: #87CEFA;
         }
 
         .custom-file-upload {
@@ -107,7 +107,7 @@
         }
 
         #productTable th {
-            background-color: #006400;
+            background-color: #00008B;
             color: #fff;
             padding: 12px;
             text-align: left;
@@ -227,6 +227,7 @@
         });
 
         function searchProduct(qrCode) {
+            const formatter = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' });
             const product = excelData.find(item => item["CODIGO"] === qrCode);
             if (product) {
                 document.getElementById("nombre").innerText = product["ARTICULO"];
@@ -234,12 +235,15 @@
                 document.getElementById("proveedor").innerText = product["PROVEEDOR"];
                 document.getElementById("unidad").innerText = product["UNIDAD"];
                 document.getElementById("cantidad").innerText = product["CANTIDAD"];
-                document.getElementById("costo").innerText = product["COSTO UNITARIO"];
-                document.getElementById("categoria").innerText = product["CATEGORIA"];
-                document.getElementById("total").innerText = product["TOTAL"];
+                document.getElementById("costo").innerText = formatter.format(product["COSTO UNITARIO"]);
+        document.getElementById("categoria").innerText = product["CATEGORIA"];
+        document.getElementById("total").innerText = formatter.format(product["TOTAL"]);
                 toggleView(true);
             } else {
                 showMessage("Producto no encontrado.");
+                document.getElementById("productTable").style.display = "none";
+        document.getElementById("infoTitle").style.display = "none"; // Hide info title
+        document.getElementById("backButton").style.display = "none"; // Hide back button
             }
         }
 
