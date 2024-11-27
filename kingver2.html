@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta de Producto</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #3498db, #8e44ad);
+            color: #333;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        h1 {
+            font-size: 2em;
+            color: #ffffff;
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+        }
+        #reader {
+            width: 300px;
+            height: 300px;
+            margin: 20px auto;
+            border: 2px solid #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            background-color: #ecf0f1;
+        }
+        #startButton, #backButton {
+            padding: 12px 24px;
+            font-size: 1em;
+            color: #fff;
+            background-color: #2980b9;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 15px;
+        }
+        #startButton:hover, #backButton:hover {
+            background-color: #3498db;
+        }
+        #loading {
+            display: none;
+            color: #ffffff;
+            margin-top: 15px;
+        }
+        #fileInput {
+            display: none;
+        }
+        .custom-file-upload {
+            padding: 12px 24px;
+            font-size: 1em;
+            color: #fff;
+            background-color: #2980b9;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 15px;
+            display: inline-block;
+        }
+        .custom-file-upload:hover {
+            background-color: #3498db;
+        }
+        #productTable {
+            margin-top: 20px;
+            width: 80%;
+            max-width: 600px;
+            border-collapse: collapse;
+            color: #333;
+            display: none;
+        }
+        #productTable, #productTable th, #productTable td {
+            border: 1px solid #ffffff;
+        }
+        #productTable th, #productTable td {
+            padding: 8px;
+            text-align: left;
+        }
+        #productTable th {
+            background-color: #2980b9;
+            color: #ffffff;
+        }
+        #infoTitle {
+            display: none;
+            font-size: 1.5em;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1 id="title">ALMACEN KINGVER</h1>
+    <div id="reader"></div>
+    <button id="startButton">Escanear Código QR</button>
+    <p id="loading">Cargando...</p>
+    <label for="fileInput" class="custom-file-upload">Seleccionar Archivo</label>
+    <input type="file" id="fileInput" />
+    <div id="infoTitle">Información del Producto</div>
+    <table id="productTable">
+        <tr><th>Campo</th><th>Información</th></tr>
+        <tr><td>Nombre del Producto</td><td id="nombre"></td></tr>
+        <tr><td>Descripción</td><td id="descripcion"></td></tr>
+        <tr><td>Proveedor</td><td id="proveedor"></td></tr>
+        <tr><td>Unidad</td><td id="unidad"></td></tr>
+        <tr><td>Cantidad</td><td id="cantidad"></td></tr>
+        <tr><td>Costo Unitario</td><td id="costo"></td></tr>
+        <tr><td>Categoría</td><td id="categoria"></td></tr>
+        <tr><td>Total</td><td id="total"></td></tr>
+    </table>
+    <button id="backButton" style="display: none;">Regresar</button>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const html5QrCode = new Html5Qrcode("reader");
+        let excelData = [];
+
+        function toggleView(showTable) {
+            document.getElementById("productTable").style.display = showTable ? "table" : "none";
+            document.getElementById("infoTitle").style.display = showTable ? "block" : "none";
+            document.getElementById("title").style.display = showTable ? "none" : "block";
+            document.getElementById("reader").style.display = showTable ? "none" : "block";
+            document.getElementById("startButton").style.display = showTable ? "none" : "block";
+            document.getElementById("backButton").style.display = showTable ? "block" : "none";
+        }
+
+        function showMessage(message) {
+            const loading = document.getElementById("loading");
+            loading.style.display = "block";
+            loading.innerText = message;
+            setTimeout(() => {
+                loading.style.display = "none";
+                loading.innerText = "Cargando...";
+            }, 3000);
+        }
+
+        function validateExcelColumns(data) {
+            const requiredColumns = ["CODIGO", "ARTICULO", "DESCRIPCION", "PROVEEDOR", "UNIDAD", "CANTIDAD", "COSTO UNITARIO", "CATEGORIA", "TOTAL"];
+            return requiredColumns.every(column => column in data[0]);
+        }
+
+        document.getElementById("fileInput").addEventListener("change", function(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, { type: "array" });
+                const sheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[sheetName];
+                excelData = XLSX.utils.sheet_to_json(worksheet);
+
+                if (!validateExcelColumns(excelData)) {
+                    showMessage("Archivo inválido. Verifica el formato.");
+                    excelData = [];
+                }
+            };
+
+            reader.readAsArrayBuffer(file);
+        });
+
+        function searchProduct(qrCode) {
+            const product = excelData.find(item => item["CODIGO"] === qrCode);
+            if (product) {
+                document.getElementById("nombre").innerText = product["ARTICULO"];
+                document.getElementById("descripcion").innerText = product["DESCRIPCION"];
+                document.getElementById("proveedor").innerText = product["PROVEEDOR"];
+                document.getElementById("unidad").innerText = product["UNIDAD"];
+                document.getElementById("cantidad").innerText = product["CANTIDAD"];
+                document.getElementById("costo").innerText = product["COSTO UNITARIO"];
+                document.getElementById("categoria").innerText = product["CATEGORIA"];
+                document.getElementById("total").innerText = product["TOTAL"];
+                toggleView(true);
+            } else {
+                showMessage("Producto no encontrado.");
+            }
+        }
+
+        document.getElementById("startButton").addEventListener("click", function() {
+            showMessage("Iniciando escáner...");
+            html5QrCode.start(
+                { facingMode: "environment" },
+                { fps: 10, qrbox: 250 },
+                qrCodeMessage => {
+                    searchProduct(qrCodeMessage);
+                    html5QrCode.stop();
+                },
+                errorMessage => console.error("Error de escaneo", errorMessage)
+            ).catch(err => {
+                showMessage("Error al iniciar el escáner.");
+                console.error("Error:", err);
+            });
+        });
+
+        document.getElementById("backButton").addEventListener("click", function() {
+            toggleView(false);
+        });
+    });
+    </script>
+</body>
+</html>
