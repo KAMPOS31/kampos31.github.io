@@ -190,7 +190,17 @@
             document.getElementById("startButton").style.display = showTable ? "none" : "block";
             document.getElementById("backButton").style.display = showTable ? "block" : "none";
         }
-
+    
+        function showMessage(message) {
+            const loading = document.getElementById("loading");
+            loading.style.display = "block";
+            loading.innerText = message;
+            setTimeout(() => {
+                loading.style.display = "none";
+                loading.innerText = "Cargando...";
+            }, 3000);
+        }
+             
         function validateExcelColumns(data) {
             const requiredColumns = ["CODIGO", "ARTICULO", "DESCRIPCION", "PROVEEDOR", "UNIDAD", "CANTIDAD", "COSTO UNITARIO", "CATEGORIA", "TOTAL"];
             return requiredColumns.every(column => column in data[0]);
