@@ -240,7 +240,8 @@
         document.getElementById("total").innerText = formatter.format(product["TOTAL"]);
                 toggleView(true);
             } else {
-                alert("Producto no encontrado.");
+                showMessage("Producto no encontrado.");
+                
             }
         }
 
