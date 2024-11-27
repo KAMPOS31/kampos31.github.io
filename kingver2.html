@@ -116,7 +116,7 @@
                 document.getElementById("nombre").innerText = product["ARTICULO"];
                 document.getElementById("descripcion").innerText = product["DESCRIPCION"];
                 document.getElementById("proveedor").innerText = product["PROVEEDOR"];
-                document.getElementById("cantidad").innerText = product["CANTIDAD"];
+                document.getElementById("cantidad").innerText = product["CANTIDAD"].toLocaleString();
                 document.getElementById("costo").innerText = formatter.format(product["COSTO UNITARIO"]);
         document.getElementById("categoria").innerText = product["CATEGORIA"];
         document.getElementById("total").innerText = formatter.format(product["TOTAL"]);
