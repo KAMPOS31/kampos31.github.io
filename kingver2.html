@@ -298,9 +298,10 @@
         document.getElementById("total").innerText = formatter.format(product["TOTAL"]);
                 toggleView(true);
             } else {
-                mensaje("Producto no encontrado.");
-                //alert("Producto no encontrado.");
-                
+            showMessage("Producto no encontrado.", {
+    backgroundColor: "#ffdd99", // Fondo amarillo
+    textColor: "#333333"       // Texto oscuro
+});      
             }
         }
 
