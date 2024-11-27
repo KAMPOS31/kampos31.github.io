@@ -184,12 +184,6 @@
     </style>
 </head>
 <body>
-    
-<div id="customAlert" class="custom-alert" style="display: none;">
-    <p id="alertMessage"></p>
-    <button id="closeAlertButton">Cerrar</button>
-</div>
-    
     <h1 id="title">Consulta de Producto</h1>
     <div id="reader"><p>Coloca el código QR frente a la cámara</p></div>
     <button id="startButton">Iniciar Escaneo</button>
@@ -211,35 +205,13 @@
     </table>
     <button id="backButton" style="display: none;">Regresar</button>
 
+    <div id="customAlert" class="custom-alert" style="display: none;">
+    <p id="alertMessage"></p>
+    <button id="closeAlertButton">Cerrar</button>
+</div>
+    
     <script>
-        
-function mensaje(message, options = {}) {
-    const alertBox = document.getElementById("customAlert");
-    const alertMessage = document.getElementById("alertMessage");
-    const closeButton = document.getElementById("closeAlertButton");
-
-    // Configurar mensaje
-    alertMessage.innerText = message;
-
-    // Aplicar estilos personalizados
-    if (options.backgroundColor) {
-        alertBox.style.backgroundColor = options.backgroundColor;
-    }
-    if (options.textColor) {
-        alertBox.style.color = options.textColor;
-    }
-
-    // Mostrar el contenedor
-    alertBox.style.display = "block";
-
-    // Cerrar el mensaje al hacer clic en el botón
-    closeButton.onclick = () => {
-        alertBox.style.display = "none";
-    };
-}
-
-        
-         document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function() {
         const html5QrCode = new Html5Qrcode("reader");
         let excelData = [];
 
@@ -263,7 +235,30 @@ function mensaje(message, options = {}) {
                 loading.innerText = "Cargando...";
             }, 3000);
         }
-             
+          function mensaje(message, options = {}) {
+    const alertBox = document.getElementById("customAlert");
+    const alertMessage = document.getElementById("alertMessage");
+    const closeButton = document.getElementById("closeAlertButton");
+
+    // Configurar mensaje
+    alertMessage.innerText = message;
+
+    // Aplicar estilos personalizados
+    if (options.backgroundColor) {
+        alertBox.style.backgroundColor = options.backgroundColor;
+    }
+    if (options.textColor) {
+        alertBox.style.color = options.textColor;
+    }
+
+    // Mostrar el contenedor
+    alertBox.style.display = "block";
+
+    // Cerrar el mensaje al hacer clic en el botón
+    closeButton.onclick = () => {
+        alertBox.style.display = "none";
+    };
+}   
         function validateExcelColumns(data) {
             const requiredColumns = ["CODIGO", "ARTICULO", "DESCRIPCION", "PROVEEDOR", "UNIDAD", "CANTIDAD", "COSTO UNITARIO", "CATEGORIA", "TOTAL"];
             return requiredColumns.every(column => column in data[0]);
