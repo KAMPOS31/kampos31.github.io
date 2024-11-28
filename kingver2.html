@@ -19,7 +19,7 @@
 
     <div id="infoTitle">Información del Producto</div>
    
-    <div id="productCard" class="card">
+    <div id="productCard" class="card" style="display: none;">
     <h2 id="nombre"></h2>
     <p><strong>Nombre del Producto:</strong> <span id="nombre"></span></p>
     <p><strong>Descripción:</strong> <span id="descripcion"></span></p>
@@ -37,15 +37,15 @@
         const html5QrCode = new Html5Qrcode("reader");
         let excelData = [];
 
-        function toggleView(showTable) {
-            document.getElementById("productTable").style.display = showTable ? "table" : "none";
-            document.getElementById("infoTitle").style.display = showTable ? "block" : "none";
-            document.getElementById("title").style.display = showTable ? "none" : "block";
-            document.getElementById("reader").style.display = showTable ? "none" : "block";
+        function toggleView(showCard) {
+            document.getElementById("productTable").style.display = showCard ? "table" : "none";
+            document.getElementById("infoTitle").style.display = showCard ? "block" : "none";
+            document.getElementById("title").style.display = showCard ? "none" : "block";
+            document.getElementById("reader").style.display = showCard ? "none" : "block";
             document.querySelector(".custom-file-upload").style.visibility = "hidden";
             document.getElementById("fileInput").style.display = "none";
-            document.getElementById("startButton").style.display = showTable ? "none" : "block";
-            document.getElementById("backButton").style.display = showTable ? "block" : "none";
+            document.getElementById("startButton").style.display = showCard ? "none" : "block";
+            document.getElementById("backButton").style.display = showCard ? "block" : "none";
         }
     
         function showMessage(message) {
