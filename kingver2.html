@@ -97,7 +97,10 @@
                 excelData = XLSX.utils.sheet_to_json(worksheet);
 
                 if (!validateExcelColumns(excelData)) {
-                    showMessage("Archivo inválido. Verifica el formato.");
+                    mensaje("Archivo inválido. Verifica el formato.", {
+            backgroundColor: "#f8d7da", // Fondo rojo claro
+            textColor: "#721c24",      // Texto rojo oscuro
+        });
                     excelData = [];
                 }
             };
