@@ -137,11 +137,13 @@
     color: #333;
     margin-bottom: 10px;
     font-size: 1.5em;
+    text-align: center;
 }
 .card p {
     margin: 5px 0;
     font-size: 1em;
     color: #555;
+    text-align: center;
 }
 .card p strong {
     color: #000;
