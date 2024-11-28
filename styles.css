@@ -147,6 +147,7 @@
 }
 .card p strong {
     color: #000;
+    text-align: left;
 }
 
         /* Animations */
