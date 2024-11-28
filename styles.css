@@ -154,6 +154,30 @@
             display: none;
         }
 
+.card {
+    background: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    max-width: 400px;
+    margin: 20px auto;
+    text-align: left;
+    font-family: Arial, sans-serif;
+}
+.card h2 {
+    color: #333;
+    margin-bottom: 10px;
+    font-size: 1.5em;
+}
+.card p {
+    margin: 5px 0;
+    font-size: 1em;
+    color: #555;
+}
+.card p strong {
+    color: #000;
+}
+
         /* Animations */
         @keyframes fadeIn {
             from {
