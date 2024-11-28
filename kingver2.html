@@ -110,7 +110,7 @@
 
         function searchProduct(qrCode) {
             const formatter = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' });
-            const product = excelData.find(item => item["CODIGO"] === qrCode);
+            const product = excelData.find(item => item["Código"] === qrCode);
             if (product) {
                 document.getElementById("codigo").innerText = product["Código"];
                 document.getElementById("descripcion").innerText = product["Descripción"];
