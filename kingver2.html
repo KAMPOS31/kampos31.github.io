@@ -20,12 +20,12 @@
     <div id="infoTitle">Información del Producto</div>
    
     <div id="productCard" class="card" style="display: none;">
-    <h2 id="nombre"></h2>
-    <p><strong>Descripción:</strong><br><span id="descripcion"></span></p>
-    <p><strong>Proveedor:</strong><br><span id="proveedor"></span></p>
-    <p><strong>Cantidad:</strong><br><span id="cantidad"></span></p>
-    <p><strong>Costo Unitario:</strong><br><span id="costo"></span></p>
+    <h2 id="descripcion"></h2>
+    <p><strong>Código:</strong><br><span id="codigo"></span></p>
     <p><strong>Categoría:</strong><br><span id="categoria"></span></p>
+    <p><strong>Costo Unitario:</strong><br><span id="costo"></span></p>
+    <p><strong>Cantidad:</strong><br><span id="cantidad"></span></p>
+    <p><strong>Proveedor:</strong><br><span id="proveedor"></span></p>
     <p><strong>Total:</strong><br><span id="total"></span></p>
 </div>
 
@@ -81,7 +81,7 @@
     };
 }   
         function validateExcelColumns(data) {
-            const requiredColumns = ["CODIGO", "ARTICULO", "DESCRIPCION", "PROVEEDOR", "CANTIDAD", "COSTO UNITARIO", "CATEGORIA", "TOTAL"];
+            const requiredColumns = ["Código", "Categoría", "Descripción", "Costo", "Cantidad", "Proveedor", "$ Total"];
             return requiredColumns.every(column => column in data[0]);
         }
 
@@ -109,13 +109,13 @@
             const formatter = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' });
             const product = excelData.find(item => item["CODIGO"] === qrCode);
             if (product) {
-                document.getElementById("nombre").innerText = product["ARTICULO"];
-                document.getElementById("descripcion").innerText = product["DESCRIPCION"];
-                document.getElementById("proveedor").innerText = product["PROVEEDOR"];
-                document.getElementById("cantidad").innerText = product["CANTIDAD"].toLocaleString();
-                document.getElementById("costo").innerText = formatter.format(product["COSTO UNITARIO"]);
-        document.getElementById("categoria").innerText = product["CATEGORIA"];
-        document.getElementById("total").innerText = formatter.format(product["TOTAL"]);
+                document.getElementById("codigo").innerText = product["Código"];
+                document.getElementById("descripcion").innerText = product["Descripción"];
+                document.getElementById("proveedor").innerText = product["Proveedor"];
+                document.getElementById("cantidad").innerText = product["Cantidad"].toLocaleString();
+                document.getElementById("costo").innerText = formatter.format(product["Costo"]);
+        document.getElementById("categoria").innerText = product["Categoría"];
+        document.getElementById("total").innerText = formatter.format(product["$ Total"]);
                 toggleView(true);
             } else {
             mensaje("Producto no encontrado.", {
