@@ -18,16 +18,18 @@
     <input type="file" id="fileInput" style="display: none;" />
 
     <div id="infoTitle">Información del Producto</div>
-    <table id="productTable">
-        <tr><th colspan="2">Resultado Consulta</th></tr>
-        <tr><td>Nombre del Producto</td><td id="nombre"></td></tr>
-        <tr><td>Descripción</td><td id="descripcion"></td></tr>
-        <tr><td>Proveedor</td><td id="proveedor"></td></tr>
-        <tr><td>Cantidad</td><td id="cantidad"></td></tr>
-        <tr><td>Costo Unitario</td><td id="costo"></td></tr>
-        <tr><td>Categoría</td><td id="categoria"></td></tr>
-        <tr><td>Total</td><td id="total"></td></tr>
-    </table>
+   
+    <div id="productCard" class="card">
+    <h2 id="nombre"></h2>
+    <p><strong>Nombre del Producto:</strong> <span id="nombre"></span></p>
+    <p><strong>Descripción:</strong> <span id="descripcion"></span></p>
+    <p><strong>Proveedor:</strong> <span id="proveedor"></span></p>
+    <p><strong>Cantidad:</strong> <span id="cantidad"></span></p>
+    <p><strong>Costo Unitario:</strong> <span id="costo"></span></p>
+    <p><strong>Categoría:</strong> <span id="categoria"></span></p>
+    <p><strong>Total:</strong> <span id="total"></span></p>
+</div>
+
     <button id="backButton" style="display: none;"><i class="fas fa-arrow-left"></i> Regresar</button>
     
     <script>
