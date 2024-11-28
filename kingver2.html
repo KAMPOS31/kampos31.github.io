@@ -127,6 +127,12 @@
 });      
             }
         }
+function playScanSound() {
+    const audio = new Audio("https://github.com/KAMPOS31/kampos31.github.io/blob/main/beep.mp3"); // URL del archivo en línea
+    audio.play().catch(err => {
+        console.warn("El sonido no pudo reproducirse automáticamente:", err);
+    });
+}
 
         document.getElementById("startButton").addEventListener("click", function() {
              if (excelData.length === 0) {
@@ -140,6 +146,7 @@
                 { facingMode: "environment" },
                 { fps: 10, qrbox: 250 },
                 qrCodeMessage => {
+                    playScanSound();
                     searchProduct(qrCodeMessage);
                     html5QrCode.stop();
                 },
