@@ -97,10 +97,10 @@
             display: inline-block;
         }
 
-        #backButton {
+        #backButton, #cancelButton{
             background-color: #e74c3c;
         }
-        #startButton {
+        #startButton, #editButton{
             background-color: #05abf2;
         }
         #backButton:hover {
