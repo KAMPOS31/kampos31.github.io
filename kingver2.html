@@ -20,7 +20,7 @@
     <div id="infoTitle"><i class="fas fa-info-circle"></i> Información del Producto</div>
    
     <div id="productCard" class="card" style="display: none;">
-    <button id="generateExcelButton" style="display: none; margin: 0 auto;"><i class="fas fa-download"></i> Generar Excel</button>
+    <button id="generateExcelButton" style="display: none;"><i class="fas fa-download"></i> Generar Excel</button>
     <h2 id="descripcion"></h2><br>
     <p><strong>Código:</strong><br><span id="codigo"></span></p>
     <p><strong>Categoría:</strong><br><span id="categoria"></span></p>
@@ -157,7 +157,7 @@
             document.getElementById("cantidadInput").disabled = true;
 
             // Mostrar el botón para generar el nuevo Excel
-            document.getElementById("generateExcelButton").style.display = "inline-block";
+            document.getElementById("generateExcelButton").style.cssText = "display: block; margin: 0 auto;";
         } else {
             mensaje("Por favor, ingresa una cantidad válida.", {
                 backgroundColor: "#f8d7da", // Fondo rojo claro
