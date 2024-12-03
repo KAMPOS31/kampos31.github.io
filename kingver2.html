@@ -25,11 +25,12 @@
     <p><strong>Código:</strong><br><span id="codigo"></span></p>
     <p><strong>Categoría:</strong><br><span id="categoria"></span></p>
     <p><strong>Costo Unitario:</strong><br><span id="costo"></span></p>
-    <p><strong>Cantidad:</strong><br><input type="number" id="cantidadInput" value="" disabled /> <button id="editButton">Editar</button></p>
+    <p><strong>Cantidad:</strong><br><input type="number" id="cantidadInput" value="" disabled disabled style="width: 100px; text-align: center;"/> 
+        <button id="editButton" class="button blue">Editar</button></p>
     <p><strong>Proveedor:</strong><br><span id="proveedor"></span></p>
     <p><strong>Total:</strong><br><span id="total"></span></p>
         <button id="saveButton" style="display: none;">Guardar Cambios</button>
-    <button id="cancelButton" style="display: none;">Cancelar</button>
+    <button id="cancelButton" style="display: none;" class="button red">Cancelar</button>
 </div>
 
     <button id="backButton" style="display: none;"><i class="fas fa-arrow-left"></i> Regresar</button>
@@ -119,8 +120,7 @@
                 document.getElementById("codigo").innerText = product["Código"];
                 document.getElementById("descripcion").innerText = product["Descripción"];
                 document.getElementById("proveedor").innerText = product["Proveedor"];
-               // document.getElementById("cantidadInput").innerText = product["Cantidad"].toLocaleString();
-                 document.getElementById("cantidadInput").value = product["Cantidad"];
+                 document.getElementById("cantidadInput").value = product["Cantidad"].toLocaleString();
                 document.getElementById("costo").innerText = formatter.format(product["Costo"]);
         document.getElementById("categoria").innerText = product["Categoría"];
         document.getElementById("total").innerText = formatter.format(product["$ Total"]);
