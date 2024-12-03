@@ -119,16 +119,16 @@
                 document.getElementById("codigo").innerText = product["Código"];
                 document.getElementById("descripcion").innerText = product["Descripción"];
                 document.getElementById("proveedor").innerText = product["Proveedor"];
-                document.getElementById("cantidad").innerText = product["Cantidad"].toLocaleString();
+               // document.getElementById("cantidadInput").innerText = product["Cantidad"].toLocaleString();
                 document.getElementById("costo").innerText = formatter.format(product["Costo"]);
         document.getElementById("categoria").innerText = product["Categoría"];
         document.getElementById("total").innerText = formatter.format(product["$ Total"]);
 
                  // Establecer producto actual
-            currentProduct = product;
+            //currentProduct = product;
 
                 // Rellenar el campo de cantidad
-            document.getElementById("cantidadInput").value = product["Cantidad"];
+            //document.getElementById("cantidadInput").value = product["Cantidad"];
                 toggleView(true);
             } else {
             mensaje("Producto no encontrado.", {
