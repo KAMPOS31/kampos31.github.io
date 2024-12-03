@@ -150,7 +150,7 @@
         // Validar que la cantidad no esté vacía o inválida
         if (newQuantity && !isNaN(newQuantity)) {
             currentProduct["Cantidad"] = parseInt(newQuantity); // Actualizar el valor de cantidad
-            document.getElementById("cantidad").innerText = newQuantity.toLocaleString(); // Actualizar en la tarjeta
+            document.getElementById("cantidadInput").innerText = newQuantity.toLocaleString(); // Actualizar en la tarjeta
             document.getElementById("saveButton").style.display = "none";
             document.getElementById("cancelButton").style.display = "none";
             document.getElementById("editButton").style.display = "inline-block";
