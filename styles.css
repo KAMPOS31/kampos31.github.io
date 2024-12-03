@@ -157,7 +157,7 @@
     width: 150px; /* Ajusta el ancho */
     height: 40px; /* Ajusta la altura */
     padding: 5px; /* Añade espacio interno */
-    font-size: 30px; /* Cambia el tamaño del texto */
+    font-size: 25px; /* Cambia el tamaño del texto */
     border: 1px solid #ccc; /* Cambia el color del borde */
     border-radius: 5px; /* Bordes redondeados */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Opcional: sombra */
