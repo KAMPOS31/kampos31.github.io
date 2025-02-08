@@ -3,87 +3,237 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generador de Vales</title>
+    <title>Consulta de Producto</title>
     <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
-    <h1>Generador de Vales</h1>
-    <button id="startScan">Escanear QR</button>
-    <div id="reader"></div>
+    <h1 id="title">Consulta de Producto</h1>
+    <button id="startButton"><i class="fas fa-qrcode"></i> Escanear QR</button>
+    <div id="reader"><p>Coloca el código QR frente a la cámara</p></div>
+    <p id="loading" style="display: none;">Cargando...</p>
+    <label for="fileInput" class="custom-file-upload"><i class="fas fa-file-upload"></i> CARGAR EXCEL</label>
     <input type="file" id="fileInput" style="display: none;" />
-    <label for="fileInput" class="custom-file-upload">Cargar Excel</label>
 
-    <div id="productCard" style="display: none;">
-        <h2 id="descripcion"></h2>
-        <p><strong>Proveedor:</strong> <span id="proveedor"></span></p>
-        <label for="cantidad">Cantidad:</label>
-        <input type="number" id="cantidad" min="1" value="1">
-        <button id="generateVale">Generar Vale</button>
-        <button id="cancel">Cancelar</button>
-    </div>
+    <div id="infoTitle"><i class="fas fa-info-circle"></i> Información del Producto</div>
+   
+    <div id="productCard" class="card" style="display: none;">
+        <!--<button id="generateExcelButton" style="display: none;"><i class="fas fa-download"></i> Generar Excel</button>-->
+    <h2 id="descripcion"></h2><br>
+    <p><strong>Código:</strong><br><span id="codigo"></span></p>
+    <p><strong>Categoría:</strong><br><span id="categoria"></span></p>
+    <p><strong>Costo Unitario:</strong><br><span id="costo"></span></p>
+    <p><strong>Cantidad:</strong><br><span id="cantidad"></span></p>
+        <!--<button id="editButton"><i class="fas fa-edit"></i> Editar</button></p>-->
+    <p><strong>Proveedor:</strong><br><span id="proveedor"></span></p>
+    <p><strong>Total:</strong><br><span id="total"></span></p>
+        <!--<button id="saveButton" style="display: none;"><i class="fas fa-save"></i> Guardar</button>
+        <button id="cancelButton" style="display: none;"><i class="fas fa-times"></i> Cancelar</button>-->
+</div>
 
-    <button id="printVale" style="display: none;">Imprimir Vale</button>
-
+    <button id="backButton" style="display: none;"><i class="fas fa-arrow-left"></i> Regresar</button>
+    
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            let excelData = [];
-            let folio = 1;
+        const html5QrCode = new Html5Qrcode("reader");
+        let excelData = [];
+            //let currentProduct = null;
+            
+        function toggleView(showCard) {
+            document.getElementById("productCard").style.display = showCard ? "block" : "none";
+            document.getElementById("infoTitle").style.display = showCard ? "block" : "none";
+            document.getElementById("title").style.display = showCard ? "none" : "block";
+            document.getElementById("reader").style.display = showCard ? "none" : "block";
+            document.querySelector(".custom-file-upload").style.visibility = "hidden";
+            document.getElementById("fileInput").style.display = "none";
+            document.getElementById("startButton").style.display = showCard ? "none" : "block";
+            document.getElementById("backButton").style.display = showCard ? "block" : "none";
+        }
+    
+        function showMessage(message) {
+            const loading = document.getElementById("loading");
+            loading.style.display = "block";
+            loading.innerText = message;
+            setTimeout(() => {
+                loading.style.display = "none";
+                loading.innerText = "Cargando...";
+            }, 3000);
+        }
+          function mensaje(message, options = {}) {
+    const alertBox = document.getElementById("customAlert");
+    const alertMessage = document.getElementById("alertMessage");
+    const closeButton = document.getElementById("closeAlertButton");
 
-            document.getElementById("fileInput").addEventListener("change", function(event) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const data = new Uint8Array(e.target.result);
-                    const workbook = XLSX.read(data, { type: "array" });
-                    const sheet = workbook.Sheets[workbook.SheetNames[0]];
-                    excelData = XLSX.utils.sheet_to_json(sheet);
-                };
-                reader.readAsArrayBuffer(event.target.files[0]);
-            });
+    // Configurar mensaje
+    alertMessage.innerText = message;
 
-            function searchProduct(qrCode) {
-                const product = excelData.find(item => item["Código"] === qrCode);
-                if (product) {
-                    document.getElementById("descripcion").innerText = product["Descripción"];
-                    document.getElementById("proveedor").innerText = product["Proveedor"];
-                    document.getElementById("productCard").style.display = "block";
+    // Aplicar estilos personalizados
+    if (options.backgroundColor) {
+        alertBox.style.backgroundColor = options.backgroundColor;
+    }
+    if (options.textColor) {
+        alertMessage.style.color = options.textColor;
+    }
+
+    // Mostrar el contenedor
+    alertBox.style.display = "block";
+
+    // Cerrar el mensaje al hacer clic en el botón
+    closeButton.onclick = () => {
+        alertBox.style.display = "none";
+    };
+}   
+        function validateExcelColumns(data) {
+            const requiredColumns = ["Código", "Categoría", "Descripción", "Costo", "Cantidad", "Proveedor", "$ Total"];
+            return requiredColumns.every(column => column in data[0]);
+        }
+
+        document.getElementById("fileInput").addEventListener("change", function(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, { type: "array" });
+                const sheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[sheetName];
+                excelData = XLSX.utils.sheet_to_json(worksheet);
+
+                if (!validateExcelColumns(excelData)) {
+                    mensaje("Archivo inválido. Verifica el formato.", {
+            backgroundColor: "#f8d7da", // Fondo rojo claro
+            textColor: "#721c24",      // Texto rojo oscuro
+        });
+                    excelData = [];
                 }
+            };
+
+            reader.readAsArrayBuffer(file);
+        });
+
+        function searchProduct(qrCode) {
+            const formatter = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' });
+            const product = excelData.find(item => item["Código"] === qrCode);
+            if (product) {
+                document.getElementById("codigo").innerText = product["Código"];
+                document.getElementById("descripcion").innerText = product["Descripción"];
+                document.getElementById("proveedor").innerText = product["Proveedor"];
+                 document.getElementById("cantidad").innerText = product["Cantidad"];
+                document.getElementById("costo").innerText = formatter.format(product["Costo"]);
+        document.getElementById("categoria").innerText = product["Categoría"];
+        document.getElementById("total").innerText = formatter.format(product["$ Total"]);
+            
+                    //currentProduct = product;
+                toggleView(true);
+            } else {
+            mensaje("Producto no encontrado.", {
+    backgroundColor: "#ffdd99", // Fondo amarillo
+    textColor: "#333333"
+});      
             }
+        }
 
-            document.getElementById("startScan").addEventListener("click", function() {
-                const qrScanner = new Html5Qrcode("reader");
-                qrScanner.start(
-                    { facingMode: "environment" },
-                    { fps: 10, qrbox: 250 },
-                    qrCodeMessage => {
-                        searchProduct(qrCodeMessage);
-                        qrScanner.stop();
-                    }
-                );
+            // Función para habilitar la edición de la cantidad
+    /*document.getElementById("editButton").addEventListener("click", function() {
+        document.getElementById("cantidadInput").disabled = false;
+        document.getElementById("saveButton").style.display = "inline-block";
+        document.getElementById("cancelButton").style.display = "inline-block";
+        document.getElementById("editButton").style.display = "none";
+    });*/
+
+    // Guardar los cambios en el campo de cantidad
+    /*document.getElementById("saveButton").addEventListener("click", function() {
+        const newQuantity = document.getElementById("cantidadInput").value;
+
+        // Validar que la cantidad no esté vacía o inválida
+        if (newQuantity && !isNaN(newQuantity)&& Number(newQuantity) >= 0) {
+            currentProduct["Cantidad"] = parseInt(newQuantity); // Actualizar el valor de cantidad
+            document.getElementById("cantidadInput").innerText = newQuantity.toLocaleString(); // Actualizar en la tarjeta
+            document.getElementById("saveButton").style.display = "none";
+            document.getElementById("cancelButton").style.display = "none";
+            document.getElementById("editButton").style.display = "inline-block";
+            document.getElementById("cantidadInput").disabled = true;
+
+            // Mostrar el botón para generar el nuevo Excel
+            document.getElementById("generateExcelButton").style.cssText = "display: block; margin: 0 auto;";
+        } else {
+            mensaje("Por favor, ingresa una cantidad válida.", {
+                backgroundColor: "#f8d7da", // Fondo rojo claro
+                textColor: "#721c24"      // Texto rojo oscuro
             });
+        }
+    });*/
 
-            document.getElementById("generateVale").addEventListener("click", function() {
-                document.getElementById("printVale").style.display = "block";
-            });
+    // Cancelar los cambios y regresar al valor original
+    /*document.getElementById("cancelButton").addEventListener("click", function() {
+        document.getElementById("cantidadInput").value = currentProduct["Cantidad"];
+        document.getElementById("saveButton").style.display = "none";
+        document.getElementById("cancelButton").style.display = "none";
+        document.getElementById("editButton").style.display = "inline-block";
+        document.getElementById("cantidadInput").disabled = true;
+    });*/
 
-            document.getElementById("printVale").addEventListener("click", function() {
-                const { jsPDF } = window.jspdf;
-                const doc = new jsPDF();
-                doc.text("Vale de Salida", 10, 10);
-                doc.text(`Folio: ${folio}`, 10, 20);
-                doc.text(`Descripción: ${document.getElementById("descripcion").innerText}`, 10, 30);
-                doc.text(`Proveedor: ${document.getElementById("proveedor").innerText}`, 10, 40);
-                doc.text(`Cantidad: ${document.getElementById("cantidad").value}`, 10, 50);
-                doc.save(`Vale_${folio}.pdf`);
-                folio++;
-            });
+    // Generar el archivo Excel actualizado
+    /*document.getElementById("generateExcelButton").addEventListener("click", function() {
+        // Convertir los datos modificados a una hoja de Excel
+        const updatedWorksheet = XLSX.utils.json_to_sheet(excelData);
 
-            document.getElementById("cancel").addEventListener("click", function() {
-                document.getElementById("productCard").style.display = "none";
+        // Crear un nuevo libro de trabajo
+        const updatedWorkbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(updatedWorkbook, updatedWorksheet, "Productos");
+
+        // Generar un archivo Excel y descargarlo
+        XLSX.writeFile(updatedWorkbook, "productos_actualizados.xlsx");
+
+        // Ocultar el botón de generación de Excel
+        document.getElementById("generateExcelButton").style.display = "none";
+
+        mensaje("Archivo actualizado descargado correctamente.", {
+        backgroundColor: "#d4edda", // Fondo verde claro
+        textColor: "#155724",      // Texto verde oscuro
+    });
+    });*/
+            
+function playScanSound() {
+    const audio = new Audio("https://github.com/KAMPOS31/kampos31.github.io/raw/refs/heads/main/beep.mp3"); // URL del archivo en línea
+    audio.play().catch(err => {
+        console.warn("El sonido no pudo reproducirse automáticamente:", err);
+    });
+}
+
+        document.getElementById("startButton").addEventListener("click", function() {
+             if (excelData.length === 0) {
+        mensaje("Por favor, carga un archivo Excel antes de iniciar el escaneo.", {
+            backgroundColor: "#f8d7da", // Fondo rojo claro
+            textColor: "#721c24",      // Texto rojo oscuro
+        });
+        return;
+    }
+            html5QrCode.start(
+                { facingMode: "environment" },
+                { fps: 10, qrbox: 250 },
+                qrCodeMessage => {
+                    playScanSound();
+                    searchProduct(qrCodeMessage);
+                    html5QrCode.stop();
+                },
+                errorMessage => console.error("Error de escaneo", errorMessage)
+            ).catch(err => {
+                showMessage("Error al iniciar el escáner.");
+                console.error("Error:", err);
             });
         });
+
+        document.getElementById("backButton").addEventListener("click", function() {
+            toggleView(false);
+        });
+    });
     </script>
+     <div id="customAlert" class="custom-alert" style="display: none;">
+    <p id="alertMessage"></p>
+    <button id="closeAlertButton"><i class="fas fa-times"></i> Cerrar</button>
+</div>
 </body>
 </html>
