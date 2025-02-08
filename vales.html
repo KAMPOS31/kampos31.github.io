@@ -49,6 +49,30 @@
                 };
                 reader.readAsArrayBuffer(file);
             });
+                   function mensaje(message, options = {}) {
+    const alertBox = document.getElementById("customAlert");
+    const alertMessage = document.getElementById("alertMessage");
+    const closeButton = document.getElementById("closeAlertButton");
+
+    // Configurar mensaje
+    alertMessage.innerText = message;
+
+    // Aplicar estilos personalizados
+    if (options.backgroundColor) {
+        alertBox.style.backgroundColor = options.backgroundColor;
+    }
+    if (options.textColor) {
+        alertMessage.style.color = options.textColor;
+    }
+
+    // Mostrar el contenedor
+    alertBox.style.display = "block";
+
+    // Cerrar el mensaje al hacer clic en el botón
+    closeButton.onclick = () => {
+        alertBox.style.display = "none";
+    };
+}  
             function searchProduct(qrCode) {
                 const productosFiltrados = excelData.filter(prod => codigosValidos.includes(prod["Código"]));
                 mostrarTarjetaProductos(productosFiltrados);
