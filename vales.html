@@ -20,17 +20,13 @@
     <div id="infoTitle"><i class="fas fa-info-circle"></i> Información del Producto</div>
    
     <div id="productCard" class="card" style="display: none;">
-        <!--<button id="generateExcelButton" style="display: none;"><i class="fas fa-download"></i> Generar Excel</button>-->
     <h2 id="descripcion"></h2><br>
     <p><strong>Código:</strong><br><span id="codigo"></span></p>
     <p><strong>Categoría:</strong><br><span id="categoria"></span></p>
     <p><strong>Costo Unitario:</strong><br><span id="costo"></span></p>
     <p><strong>Cantidad:</strong><br><span id="cantidad"></span></p>
-        <!--<button id="editButton"><i class="fas fa-edit"></i> Editar</button></p>-->
     <p><strong>Proveedor:</strong><br><span id="proveedor"></span></p>
     <p><strong>Total:</strong><br><span id="total"></span></p>
-        <!--<button id="saveButton" style="display: none;"><i class="fas fa-save"></i> Guardar</button>
-        <button id="cancelButton" style="display: none;"><i class="fas fa-times"></i> Cancelar</button>-->
 </div>
 
     <button id="backButton" style="display: none;"><i class="fas fa-arrow-left"></i> Regresar</button>
@@ -39,7 +35,6 @@
         document.addEventListener("DOMContentLoaded", function() {
         const html5QrCode = new Html5Qrcode("reader");
         let excelData = [];
-            //let currentProduct = null;
             
         function toggleView(showCard) {
             document.getElementById("productCard").style.display = showCard ? "block" : "none";
@@ -134,68 +129,7 @@
 });      
             }
         }
-
-            // Función para habilitar la edición de la cantidad
-    /*document.getElementById("editButton").addEventListener("click", function() {
-        document.getElementById("cantidadInput").disabled = false;
-        document.getElementById("saveButton").style.display = "inline-block";
-        document.getElementById("cancelButton").style.display = "inline-block";
-        document.getElementById("editButton").style.display = "none";
-    });*/
-
-    // Guardar los cambios en el campo de cantidad
-    /*document.getElementById("saveButton").addEventListener("click", function() {
-        const newQuantity = document.getElementById("cantidadInput").value;
-
-        // Validar que la cantidad no esté vacía o inválida
-        if (newQuantity && !isNaN(newQuantity)&& Number(newQuantity) >= 0) {
-            currentProduct["Cantidad"] = parseInt(newQuantity); // Actualizar el valor de cantidad
-            document.getElementById("cantidadInput").innerText = newQuantity.toLocaleString(); // Actualizar en la tarjeta
-            document.getElementById("saveButton").style.display = "none";
-            document.getElementById("cancelButton").style.display = "none";
-            document.getElementById("editButton").style.display = "inline-block";
-            document.getElementById("cantidadInput").disabled = true;
-
-            // Mostrar el botón para generar el nuevo Excel
-            document.getElementById("generateExcelButton").style.cssText = "display: block; margin: 0 auto;";
-        } else {
-            mensaje("Por favor, ingresa una cantidad válida.", {
-                backgroundColor: "#f8d7da", // Fondo rojo claro
-                textColor: "#721c24"      // Texto rojo oscuro
-            });
-        }
-    });*/
-
-    // Cancelar los cambios y regresar al valor original
-    /*document.getElementById("cancelButton").addEventListener("click", function() {
-        document.getElementById("cantidadInput").value = currentProduct["Cantidad"];
-        document.getElementById("saveButton").style.display = "none";
-        document.getElementById("cancelButton").style.display = "none";
-        document.getElementById("editButton").style.display = "inline-block";
-        document.getElementById("cantidadInput").disabled = true;
-    });*/
-
-    // Generar el archivo Excel actualizado
-    /*document.getElementById("generateExcelButton").addEventListener("click", function() {
-        // Convertir los datos modificados a una hoja de Excel
-        const updatedWorksheet = XLSX.utils.json_to_sheet(excelData);
-
-        // Crear un nuevo libro de trabajo
-        const updatedWorkbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(updatedWorkbook, updatedWorksheet, "Productos");
-
-        // Generar un archivo Excel y descargarlo
-        XLSX.writeFile(updatedWorkbook, "productos_actualizados.xlsx");
-
-        // Ocultar el botón de generación de Excel
-        document.getElementById("generateExcelButton").style.display = "none";
-
-        mensaje("Archivo actualizado descargado correctamente.", {
-        backgroundColor: "#d4edda", // Fondo verde claro
-        textColor: "#155724",      // Texto verde oscuro
-    });
-    });*/
-            
+    
 function playScanSound() {
     const audio = new Audio("https://github.com/KAMPOS31/kampos31.github.io/raw/refs/heads/main/beep.mp3"); // URL del archivo en línea
     audio.play().catch(err => {
