@@ -73,6 +73,12 @@
         alertBox.style.display = "none";
     };
 }  
+            function playScanSound() {
+    const audio = new Audio("https://github.com/KAMPOS31/kampos31.github.io/raw/refs/heads/main/beep.mp3"); // URL del archivo en línea
+    audio.play().catch(err => {
+        console.warn("El sonido no pudo reproducirse automáticamente:", err);
+    });
+}
             function searchProduct(qrCode) {
                 const productosFiltrados = excelData.filter(prod => codigosValidos.includes(prod["Código"]));
                 mostrarTarjetaProductos(productosFiltrados);
