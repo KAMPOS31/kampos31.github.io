@@ -80,8 +80,16 @@
     });
 }
             function searchProduct(qrCode) {
-                const productosFiltrados = excelData.filter(prod => codigosValidos.includes(prod["Código"]));
+                   if (codigo == "OSLIMCAB") {
+                        const productosFiltrados = excelData.filter(prod => codigosValidos.includes(prod["Código"]));
                 mostrarTarjetaProductos(productosFiltrados);
+        });
+        return;
+                 mensaje("Código no válido. Escanea el código correcto.", {
+            backgroundColor: "#f8d7da",
+            textColor: "#721c24"
+    }
+               
             }
             function mostrarTarjetaProductos(productos) {
                 const contenedor = document.getElementById("tarjetaProductos");
