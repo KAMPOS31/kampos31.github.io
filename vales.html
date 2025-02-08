@@ -151,13 +151,6 @@
                 });
             }
             document.getElementById("startButton").addEventListener("click", function() {
-                     if (excelData.length === 0) {
-        mensaje("Por favor, carga un archivo Excel antes de iniciar el escaneo.", {
-            backgroundColor: "#f8d7da", // Fondo rojo claro
-            textColor: "#721c24",      // Texto rojo oscuro
-        });
-        return;
-    }
                 html5QrCode.start({ facingMode: "environment" }, { fps: 10, qrbox: 250 }, qrCodeMessage => {
                      playScanSound();
                     searchProduct(qrCodeMessage);
