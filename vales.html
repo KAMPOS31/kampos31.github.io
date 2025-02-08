@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Vales</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <h1>Generador de Vales</h1>
+    <button id="startScan">Escanear QR</button>
+    <div id="reader"></div>
+    <input type="file" id="fileInput" style="display: none;" />
+    <label for="fileInput" class="custom-file-upload">Cargar Excel</label>
+
+    <div id="productCard" style="display: none;">
+        <h2 id="descripcion"></h2>
+        <p><strong>Proveedor:</strong> <span id="proveedor"></span></p>
+        <label for="cantidad">Cantidad:</label>
+        <input type="number" id="cantidad" min="1" value="1">
+        <button id="generateVale">Generar Vale</button>
+        <button id="cancel">Cancelar</button>
+    </div>
+
+    <button id="printVale" style="display: none;">Imprimir Vale</button>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let excelData = [];
+            let folio = 1;
+
+            document.getElementById("fileInput").addEventListener("change", function(event) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: "array" });
+                    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+                    excelData = XLSX.utils.sheet_to_json(sheet);
+                };
+                reader.readAsArrayBuffer(event.target.files[0]);
+            });
+
+            function searchProduct(qrCode) {
+                const product = excelData.find(item => item["Código"] === qrCode);
+                if (product) {
+                    document.getElementById("descripcion").innerText = product["Descripción"];
+                    document.getElementById("proveedor").innerText = product["Proveedor"];
+                    document.getElementById("productCard").style.display = "block";
+                }
+            }
+
+            document.getElementById("startScan").addEventListener("click", function() {
+                const qrScanner = new Html5Qrcode("reader");
+                qrScanner.start(
+                    { facingMode: "environment" },
+                    { fps: 10, qrbox: 250 },
+                    qrCodeMessage => {
+                        searchProduct(qrCodeMessage);
+                        qrScanner.stop();
+                    }
+                );
+            });
+
+            document.getElementById("generateVale").addEventListener("click", function() {
+                document.getElementById("printVale").style.display = "block";
+            });
+
+            document.getElementById("printVale").addEventListener("click", function() {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                doc.text("Vale de Salida", 10, 10);
+                doc.text(`Folio: ${folio}`, 10, 20);
+                doc.text(`Descripción: ${document.getElementById("descripcion").innerText}`, 10, 30);
+                doc.text(`Proveedor: ${document.getElementById("proveedor").innerText}`, 10, 40);
+                doc.text(`Cantidad: ${document.getElementById("cantidad").value}`, 10, 50);
+                doc.save(`Vale_${folio}.pdf`);
+                folio++;
+            });
+
+            document.getElementById("cancel").addEventListener("click", function() {
+                document.getElementById("productCard").style.display = "none";
+            });
+        });
+    </script>
+</body>
+</html>
