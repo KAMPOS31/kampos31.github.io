@@ -152,7 +152,7 @@
             }
             document.getElementById("startButton").addEventListener("click", function() {
                 if (excelData.length === 0) {
-                    alert("Por favor, carga un archivo Excel antes de iniciar el escaneo.");
+                    mensaje("Por favor, carga un archivo Excel antes de iniciar el escaneo.");
                     return;
                 }
                 html5QrCode.start({ facingMode: "environment" }, { fps: 10, qrbox: 250 }, qrCodeMessage => {
