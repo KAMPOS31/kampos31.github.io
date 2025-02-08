@@ -148,6 +148,7 @@
                     return;
                 }
                 html5QrCode.start({ facingMode: "environment" }, { fps: 10, qrbox: 250 }, qrCodeMessage => {
+                     playScanSound();
                     searchProduct(qrCodeMessage);
                     html5QrCode.stop();
                 });
