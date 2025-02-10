@@ -215,15 +215,8 @@ function playScanSound() {
                 { facingMode: "environment" },
                 { fps: 10, qrbox: 250 },
                 qrCodeMessage => {
-                    playScanSound();
-                    if (qrCodeMessage === "OSLIMCAB") {
-                searchProduct(qrCodeMessage);
-            } else {
-                mensaje("Código QR no válido.", {
-                    backgroundColor: "#ffdd99",
-                    textColor: "#333333"
-                });
-            }
+                   playScanSound();
+                    searchProduct(qrCodeMessage);
                     html5QrCode.stop();
                 },
                 errorMessage => console.error("Error de escaneo", errorMessage)
