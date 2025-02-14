@@ -29,9 +29,7 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
         const html5QrCode = new Html5Qrcode("reader");
-        let excelData = [];
-            //let currentProduct = null;
-            
+        let excelData = [];   
         function toggleView(showCard) {
             document.getElementById("productCard").style.display = showCard ? "block" : "none";
             document.getElementById("infoTitle").style.display = showCard ? "block" : "none";
