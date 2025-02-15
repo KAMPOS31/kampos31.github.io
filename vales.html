@@ -18,7 +18,7 @@
     <input type="file" id="fileInput" style="display: none;" />
     <div id="infoTitle"><i class="fas fa-info-circle"></i> Información del Vale</div>
     <div id="productCard" class="card" style="display: none;">
-    <h2 id="productos">Articulos</h2><br>
+    <h2 id="productos">ARTICULOS</h2><br>
     <p><strong>Código:</strong><br><span id="descripcion"></span></p>
 </div>
 
@@ -102,8 +102,17 @@
 
         function searchProduct(qrCode) {
             if (qrCode === "OSLIMCAB") {
-                 const product = excelData.find(item => item["Código"] === "A2604");
-                 document.getElementById("descripcion").innerText = product["Descripción"];
+                 const requiredCodes = ["A2604", "CERI-SLIM-CABALLERO", "ESTICK-NEG-OPT", "FIT-OPT-SLIM", "PLAST2\"", "45X45C110", "CINTRANS48X150", "CINTRASIV"];
+                const productList = document.getElementById("productList");
+                productList.innerHTML = "";
+                requiredCodes.forEach(code => {
+                    const product = excelData.find(item => item["Código"] === code);
+                    if (product) {
+                        const listItem = document.createElement("li");
+                        listItem.textContent = `${product["Descripción"]}`;
+                        productList.appendChild(listItem);
+                    }
+                });
                 toggleView(true);
             } else {
             mensaje("Producto no encontrado.", {
