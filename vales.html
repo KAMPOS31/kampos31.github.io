@@ -110,6 +110,7 @@
 
         codigosBuscados.forEach(codigo => {
             let producto = excelData.find(item => item["Código"] === codigo);
+             document.getElementById("codigo").innerText = qrCode;
             if (producto) {
                 productosEncontrados.push(producto["Descripción"]);
             }
