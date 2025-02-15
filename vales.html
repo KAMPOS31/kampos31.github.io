@@ -19,6 +19,7 @@
     <div id="infoTitle"><i class="fas fa-info-circle"></i> Información del Vale</div>
     <div id="productCard" class="card" style="display: none;">
     <h2 id="productos">ARTICULOS</h2><br>
+        <ul id="listaProductos"></ul> <!-- Aquí se mostrarán las descripciones -->
     <p><strong>Código:</strong><br><span id="descripcion"></span></p>
 </div>
 
@@ -37,6 +38,7 @@
             document.getElementById("fileInput").style.display = "none";
             document.getElementById("startButton").style.display = showCard ? "none" : "block";
             document.getElementById("backButton").style.display = showCard ? "block" : "none";
+            document.getElementById("listaProductos").style.display = showCard ? "block" : "none";
         }
     
         function showMessage(message) {
@@ -101,26 +103,31 @@
         });
 
         function searchProduct(qrCode) {
-            if (qrCode === "OSLIMCAB") {
-                 const requiredCodes = ["A2604", "CERI-SLIM-CABALLERO", "ESTICK-NEG-OPT", "FIT-OPT-SLIM", "PLAST2\"", "45X45C110", "CINTRANS48X150", "CINTRASIV"];
-                const productList = document.getElementById("productList");
-                productList.innerHTML = "";
-                requiredCodes.forEach(code => {
-                    const product = excelData.find(item => item["Código"] === code);
-                    if (product) {
-                        const listItem = document.createElement("li");
-                        listItem.textContent = `${product["Descripción"]}`;
-                        productList.appendChild(listItem);
-                    }
-                });
-                toggleView(true);
-            } else {
-            mensaje("Producto no encontrado.", {
-    backgroundColor: "#ffdd99", // Fondo amarillo
-    textColor: "#333333"
-});      
+           if (qrCode === "OSLIMCAB") {
+        let productosEncontrados = [];
+        let codigosBuscados = ["A2604", "CERI-SLIM-CABALLERO", "ESTICK-NEG-OPT", "FIT-OPT-SLIM", "PLAST2\"", "45X45C110", "CINTRANS48X150", "CINTRASIV"];
+
+        codigosBuscados.forEach(codigo => {
+            let producto = excelData.find(item => item["Código"] === codigo);
+            if (producto) {
+                productosEncontrados.push(producto["Descripción"]);
             }
-        }           
+        });
+
+        console.log("Productos encontrados:", productosEncontrados);
+
+        if (productosEncontrados.length > 0) {
+            let listaHtml = productosEncontrados.map(desc => `<li>${desc}</li>`).join("");
+            document.getElementById("listaProductos").innerHTML = listaHtml;
+            toggleView(true);
+        } else {
+            mensaje("No se encontraron productos en el archivo Excel.", { backgroundColor: "#ffdd99", textColor: "#333333" });
+        }
+    } else {
+        mensaje("Código QR no válido.", { backgroundColor: "#ffdd99", textColor: "#333333" });
+    }
+        }
+            
 function playScanSound() {
     const audio = new Audio("https://github.com/KAMPOS31/kampos31.github.io/raw/refs/heads/main/beep.mp3"); // URL del archivo en línea
     audio.play().catch(err => {
