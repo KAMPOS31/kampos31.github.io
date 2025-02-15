@@ -24,10 +24,13 @@
     <ul id="listaProductos"></ul> <!-- Aquí se mostrarán las descripciones -->
     <button id="printButton" style="display: none;"><i class="fas fa-print"></i> Imprimir Vale</button>
 </div>
-<p id="alertMessage"></p>
+    
+<div id="customAlert" class="custom-alert" style="display: none;">
+        <p id="alertMessage"></p>
         <button id="confirmPrintButton" style="display: none;"><i class="fas fa-check"></i> Imprimir</button>
         <button id="cancelButton" style="display: none;"><i class="fas fa-times"></i> Cancelar</button>
     </div>
+    
     <button id="backButton" style="display: none;"><i class="fas fa-arrow-left"></i> Regresar</button>
     
     <script>
@@ -67,10 +70,7 @@
                 if (valid) {
                     mostrarConfirmacion("¿Los datos son correctos?", true);
                 } else {
-                    mensaje("Corrige los valores antes de continuar.", {
-            backgroundColor: "#f8d7da", // Fondo rojo claro
-            textColor: "#721c24",      // Texto rojo oscuro
-        });
+                     mostrarConfirmacion( "Corrige los valores antes de continuar.");
                 }
             });
             
