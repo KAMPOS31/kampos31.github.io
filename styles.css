@@ -125,7 +125,12 @@
             margin: 20px 0 10px;
             display: none;
         }
-
+#listaProductos {
+    font-size: 18px; /* Aumenta el tamaño de la letra */
+    font-weight: bold; /* Hace el texto más grueso */
+    line-height: 1.5; /* Aumenta el espacio entre líneas */
+    padding-left: 20px; /* Agrega un poco de espacio en la izquierda */
+}
 .card {
     background: #fff;
     border-radius: 8px;
