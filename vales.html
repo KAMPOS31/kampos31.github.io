@@ -182,7 +182,8 @@ function playScanSound() {
                 const alertBox = document.getElementById("customAlert2");
                 const alertMessage = document.getElementById("alertMessage2");
                 const closeButton = document.getElementById("cancelButton");
-
+                const printBtn = document.getElementById("confirmPrintButton");
+                
                 alertMessage.innerText = message;
                 alertBox.style.display = "block";
                 document.getElementById("confirmPrintButton").style.display = confirm ? "block" : "none";
@@ -190,6 +191,9 @@ function playScanSound() {
 
                 closeButton.onclick = () => {
         alertBox.style.display = "none";
+    };
+                  printBtn.onclick = () => {
+        generarPDF();
     };
             }
 
@@ -219,10 +223,6 @@ function playScanSound() {
         });
     }
 }
-
-    document.getElementById("confirmPrintButton").addEventListener("click", function() {
-    generarPDF();
-});
 
 function generarPDF() {
     const { jsPDF } = window.jspdf;
