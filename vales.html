@@ -24,13 +24,10 @@
     <ul id="listaProductos"></ul> <!-- Aquí se mostrarán las descripciones -->
     <button id="printButton" style="display: none;"><i class="fas fa-print"></i> Imprimir Vale</button>
 </div>
-    
-<div id="customAlert" class="custom-alert" style="display: none;">
-        <p id="alertMessage"></p>
+<p id="alertMessage"></p>
         <button id="confirmPrintButton" style="display: none;"><i class="fas fa-check"></i> Imprimir</button>
         <button id="cancelButton" style="display: none;"><i class="fas fa-times"></i> Cancelar</button>
     </div>
-    
     <button id="backButton" style="display: none;"><i class="fas fa-arrow-left"></i> Regresar</button>
     
     <script>
@@ -46,10 +43,10 @@
             document.getElementById("fileInput").style.display = "none";
             document.getElementById("startButton").style.display = showCard ? "none" : "block";
             document.getElementById("backButton").style.display = showCard ? "block" : "none";
-            document.getElementById("printButton").style.display = showCard ? "block" : "none";
             document.getElementById("listaProductos").style.display = showCard ? "block" : "none";
+            document.getElementById("printButton").style.display = showCard ? "block" : "none";
         }
-   
+            
         function showMessage(message) {
             const loading = document.getElementById("loading");
             loading.style.display = "block";
@@ -121,7 +118,7 @@
             let producto = excelData.find(item => item["Código"] === codigo);
              document.getElementById("codigo").innerText = qrCode;
             if (producto) {
-                  productosEncontrados.push(`
+                  productosEncontrados.push(
         <div style="display: flex; align-items: center; margin-bottom: 10px;">
             <span style="font-size: 18px; font-weight: bold; margin-right: 10px;">${contador}.</span>
             <input type="number" min="0" value="0"
@@ -129,7 +126,7 @@
                 border: 2px solid #007bff; outline: none; padding: 5px; margin-right: 15px;">
             <span style="font-size: 18px; font-weight: bold;">${producto["Descripción"]}</span>
         </div>
-    `);
+    );
     contador++; // Incrementar el número para el siguiente elemento
             }
         });
@@ -137,7 +134,7 @@
         console.log("Productos encontrados:", productosEncontrados);
 
         if (productosEncontrados.length > 0) {
-            let listaHtml = productosEncontrados.map(desc => `<li>${desc}</li>`).join("");
+            let listaHtml = productosEncontrados.map(desc => <li>${desc}</li>).join("");
             document.getElementById("listaProductos").innerHTML = listaHtml;
             toggleView(true);
         } else {
