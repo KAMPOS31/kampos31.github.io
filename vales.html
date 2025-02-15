@@ -46,54 +46,10 @@
             document.getElementById("fileInput").style.display = "none";
             document.getElementById("startButton").style.display = showCard ? "none" : "block";
             document.getElementById("backButton").style.display = showCard ? "block" : "none";
+            document.getElementById("printButton").style.display = showCard ? "block" : "none";
             document.getElementById("listaProductos").style.display = showCard ? "block" : "none";
         }
-    function mostrarConfirmacion(message, confirm = false) {
-                const alertBox = document.getElementById("customAlert");
-                const alertMessage = document.getElementById("alertMessage");
-                alertMessage.innerText = message;
-                alertBox.style.display = "block";
-                document.getElementById("confirmPrintButton").style.display = confirm ? "block" : "none";
-                document.getElementById("cancelButton").style.display = confirm ? "block" : "none";
-            }
-
-            document.getElementById("printButton").addEventListener("click", function() {
-                const inputs = document.querySelectorAll(".cantidadInput");
-                let valid = true;
-                
-                inputs.forEach(input => {
-                    if (input.value === "" || isNaN(input.value) || input.value <= 0) {
-                        valid = false;
-                    }
-                });
-                
-                if (valid) {
-                    mostrarConfirmacion("¿Los datos son correctos?", true);
-                } else {
-       mostrarConfirmacion("Corrige los valores antes de continuar.", false);
-                }
-            });
-            
-            document.getElementById("confirmPrintButton").addEventListener("click", function() {
-                generarPDF();
-            });
-            
-            function generarPDF() {
-                const { jsPDF } = window.jspdf;
-                const doc = new jsPDF();
-                doc.text("Reporte de Vale", 10, 10);
-                let y = 20;
-                
-                productosEncontrados.forEach((producto, index) => {
-                    const cantidad = document.getElementById(`cantidad-${index}`).value;
-                    doc.text(`${index + 1}. ${producto} - Cantidad: ${cantidad}`, 10, y);
-                    y += 10;
-                });
-                
-                doc.save("vale.pdf");
-            }
-        });
-        
+   
         function showMessage(message) {
             const loading = document.getElementById("loading");
             loading.style.display = "block";
