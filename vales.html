@@ -20,7 +20,7 @@
     <div id="productCard" class="card" style="display: none;">
     <h2>ARTICULOS</h2>
     <p><strong>Código: </strong><br><span id="codigo"></span></p><br>
-    <p><strong>Cantidad &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Descripción</strong></p>
+    <p><strong>Relación de Productos</strong></p>
     <ul id="listaProductos"></ul> <!-- Aquí se mostrarán las descripciones -->
 </div>
 
@@ -112,7 +112,12 @@
             let producto = excelData.find(item => item["Código"] === codigo);
              document.getElementById("codigo").innerText = qrCode;
             if (producto) {
-                productosEncontrados.push(producto["Descripción"]);
+                  productosEncontrados.push(`
+        <div>
+            <input type="number" min="0" value="0" style="width: 50px; margin-right: 10px;">
+            ${producto["Descripción"]}
+        </div>
+    `);
             }
         });
 
