@@ -111,6 +111,7 @@
         codigosBuscados.forEach(codigo => {
             let producto = excelData.find(item => item["Código"] === codigo);
              document.getElementById("codigo").innerText = qrCode;
+            let contador = 1; // Iniciar el contador en 1
             if (producto) {
                   productosEncontrados.push(`
         <div style="display: flex; align-items: center; margin-bottom: 10px;">
