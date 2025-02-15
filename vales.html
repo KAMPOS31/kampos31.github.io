@@ -207,7 +207,10 @@ function playScanSound() {
         document.getElementById("confirmPrintButton").style.display = "block";
         document.getElementById("cancelButton").style.display = "block";
     } else {
-        mensaje2("Corrige los valores antes de continuar.");
+        mensaje("Corrige los valores antes de continuar.", {
+            backgroundColor: "#f8d7da", // Fondo rojo claro
+            textColor: "#721c24",      // Texto rojo oscuro
+        });
     }
 }
 
