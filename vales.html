@@ -17,14 +17,15 @@
     <label for="fileInput" class="custom-file-upload"><i class="fas fa-file-upload"></i> CARGAR EXCEL</label>
     <input type="file" id="fileInput" style="display: none;" />
     <div id="infoTitle"><i class="fas fa-info-circle"></i> Información del Vale</div>
+    
     <div id="productCard" class="card" style="display: none;">
     <h2>ARTICULOS</h2>
     <p><strong>Código: </strong><br><span id="codigo"></span></p><br>
     <p><strong>Relación de Productos</strong></p>
     <ul id="listaProductos"></ul> <!-- Aquí se mostrarán las descripciones -->
     <button id="printButton" style="display: none;"><i class="fas fa-print"></i> Imprimir Vale</button>
-</div>
-
+</div> 
+    
     <button id="backButton" style="display: none;"><i class="fas fa-arrow-left"></i> Regresar</button>
     
     <script>
@@ -175,11 +176,74 @@ function playScanSound() {
         document.getElementById("backButton").addEventListener("click", function() {
             toggleView(false);
         });
+
+
+            function mensaje2(message, confirm = false) {
+                const alertBox = document.getElementById("customAlert2");
+                const alertMessage = document.getElementById("alertMessage2");
+                alertMessage.innerText = message;
+                alertBox.style.display = "block";
+                document.getElementById("confirmPrintButton").style.display = confirm ? "block" : "none";
+                document.getElementById("cancelButton").style.display = confirm ? "block" : "none";
+            }
+
+            
+          document.getElementById("printButton").addEventListener("click", function() {
+                    validarCamposAntesDeImprimir();
+                });
+
+            function validarCamposAntesDeImprimir() {
+    const inputs = document.querySelectorAll(".cantidadInput");
+    let valid = true;
+
+    inputs.forEach(input => {
+        if (input.value === "" || isNaN(input.value) || input.value <= 0) {
+            valid = false;
+        }
+    });
+
+    if (valid) {
+        mensaje2("¿Los datos son correctos?", true);
+        document.getElementById("confirmPrintButton").style.display = "block";
+        document.getElementById("cancelButton").style.display = "block";
+    } else {
+        mensaje2("Corrige los valores antes de continuar.");
+    }
+}
+
+    document.getElementById("confirmPrintButton").addEventListener("click", function() {
+    generarPDF();
+});
+
+function generarPDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    doc.text("Reporte de Vale", 10, 10);
+    let y = 20;
+
+    document.querySelectorAll(".cantidadInput").forEach((input, index) => {
+        const cantidad = input.value;
+        const descripcion = input.parentElement.querySelector("span:last-child").innerText;
+        doc.text(`${index + 1}. ${descripcion} - Cantidad: ${cantidad}`, 10, y);
+        y += 10;
+    });
+
+    doc.save("vale.pdf");
+}
+
     });
     </script>
+    
      <div id="customAlert" class="custom-alert" style="display: none;">
     <p id="alertMessage"></p>
     <button id="closeAlertButton"><i class="fas fa-times"></i> Cerrar</button>
 </div>
+
+             <div id="customAlert2" class="custom-alert" style="display: none;">
+        <p id="alertMessage2"></p>
+        <button id="confirmPrintButton" style="display: none;"><i class="fas fa-check"></i> Imprimir</button>
+        <button id="cancelButton" style="display: none;"><i class="fas fa-times"></i> Cancelar</button>
+    </div>
+    
 </body>
 </html>
