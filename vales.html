@@ -207,7 +207,7 @@ function playScanSound() {
     let valid = true;
 
     inputs.forEach(input => {
-        if (input.value === "" || isNaN(input.value) || input.value <= 0) {
+        if (input.value === "" || input.value <= 0) {
             valid = false;
         }
     });
