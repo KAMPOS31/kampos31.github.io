@@ -181,10 +181,16 @@ function playScanSound() {
             function mensaje2(message, confirm = false) {
                 const alertBox = document.getElementById("customAlert2");
                 const alertMessage = document.getElementById("alertMessage2");
+                const closeButton = document.getElementById("cancelButton");
+
                 alertMessage.innerText = message;
                 alertBox.style.display = "block";
                 document.getElementById("confirmPrintButton").style.display = confirm ? "block" : "none";
                 document.getElementById("cancelButton").style.display = confirm ? "block" : "none";
+
+                closeButton.onclick = () => {
+        alertBox.style.display = "none";
+    };
             }
 
             
