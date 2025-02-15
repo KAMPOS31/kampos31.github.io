@@ -45,7 +45,7 @@
             document.getElementById("backButton").style.display = showCard ? "block" : "none";
             document.getElementById("listaProductos").style.display = showCard ? "block" : "none";
         }
-    function mensaje2(message, confirm = false) {
+    function mostrarConfirmacion(message, confirm = false) {
                 const alertBox = document.getElementById("customAlert");
                 const alertMessage = document.getElementById("alertMessage");
                 alertMessage.innerText = message;
@@ -65,9 +65,12 @@
                 });
                 
                 if (valid) {
-                    mensaje2("¿Los datos son correctos?", true);
+                    mostrarConfirmacion("¿Los datos son correctos?", true);
                 } else {
-                    mensaje("Corrige los valores antes de continuar.");
+                    mensaje("Corrige los valores antes de continuar.", {
+            backgroundColor: "#f8d7da", // Fondo rojo claro
+            textColor: "#721c24",      // Texto rojo oscuro
+        });
                 }
             });
             
