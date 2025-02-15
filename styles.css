@@ -109,7 +109,10 @@
         #backButton:hover {
             background-color: #ff7675;
         }
-       
+       #printButton {
+           align-items: center;
+            justify-content: center;
+        }
         /* Loading */
         #loading {
             font-size: 1em;
