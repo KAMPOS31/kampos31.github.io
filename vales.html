@@ -22,8 +22,12 @@
     <p><strong>Código: </strong><br><span id="codigo"></span></p><br>
     <p><strong>Relación de Productos</strong></p>
     <ul id="listaProductos"></ul> <!-- Aquí se mostrarán las descripciones -->
+    <button id="printButton" style="display: none;"><i class="fas fa-print"></i> Imprimir Vale</button>
 </div>
-
+<p id="alertMessage"></p>
+        <button id="confirmPrintButton" style="display: none;"><i class="fas fa-check"></i> Imprimir</button>
+        <button id="cancelButton" style="display: none;"><i class="fas fa-times"></i> Cancelar</button>
+    </div>
     <button id="backButton" style="display: none;"><i class="fas fa-arrow-left"></i> Regresar</button>
     
     <script>
@@ -41,7 +45,52 @@
             document.getElementById("backButton").style.display = showCard ? "block" : "none";
             document.getElementById("listaProductos").style.display = showCard ? "block" : "none";
         }
-    
+    function mensaje2(message, confirm = false) {
+                const alertBox = document.getElementById("customAlert");
+                const alertMessage = document.getElementById("alertMessage");
+                alertMessage.innerText = message;
+                alertBox.style.display = "block";
+                document.getElementById("confirmPrintButton").style.display = confirm ? "block" : "none";
+                document.getElementById("cancelButton").style.display = confirm ? "block" : "none";
+            }
+
+            document.getElementById("printButton").addEventListener("click", function() {
+                const inputs = document.querySelectorAll(".cantidadInput");
+                let valid = true;
+                
+                inputs.forEach(input => {
+                    if (input.value === "" || isNaN(input.value) || input.value <= 0) {
+                        valid = false;
+                    }
+                });
+                
+                if (valid) {
+                    mensaje("¿Los datos son correctos?", true);
+                } else {
+                    mensaje("Corrige los valores antes de continuar.");
+                }
+            });
+            
+            document.getElementById("confirmPrintButton").addEventListener("click", function() {
+                generarPDF();
+            });
+            
+            function generarPDF() {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                doc.text("Reporte de Vale", 10, 10);
+                let y = 20;
+                
+                productosEncontrados.forEach((producto, index) => {
+                    const cantidad = document.getElementById(`cantidad-${index}`).value;
+                    doc.text(`${index + 1}. ${producto} - Cantidad: ${cantidad}`, 10, y);
+                    y += 10;
+                });
+                
+                doc.save("vale.pdf");
+            }
+        });
+        
         function showMessage(message) {
             const loading = document.getElementById("loading");
             loading.style.display = "block";
