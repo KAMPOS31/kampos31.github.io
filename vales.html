@@ -102,7 +102,8 @@
 
         function searchProduct(qrCode) {
             if (qrCode === "OSLIMCAB") {
-                document.getElementById("descripcion").innerText = "MUESTRA";
+                 const product = excelData.find(item => item["Código"] === "A2604");
+                 document.getElementById("descripcion").innerText = product["Descripción"];
                 toggleView(true);
             } else {
             mensaje("Producto no encontrado.", {
