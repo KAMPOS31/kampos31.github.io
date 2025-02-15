@@ -22,6 +22,7 @@
     <p><strong>Código: </strong><br><span id="codigo"></span></p><br>
     <p><strong>Relación de Productos</strong></p>
     <ul id="listaProductos"></ul> <!-- Aquí se mostrarán las descripciones -->
+    <button id="printButton" style="display: none;"><i class="fas fa-print"></i> Imprimir Vale</button>
 </div>
 
     <button id="backButton" style="display: none;"><i class="fas fa-arrow-left"></i> Regresar</button>
@@ -40,6 +41,7 @@
             document.getElementById("startButton").style.display = showCard ? "none" : "block";
             document.getElementById("backButton").style.display = showCard ? "block" : "none";
             document.getElementById("listaProductos").style.display = showCard ? "block" : "none";
+            document.getElementById("printButton").style.display = showCard ? "block" : "none";
         }
     
         function showMessage(message) {
