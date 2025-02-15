@@ -200,7 +200,7 @@ function playScanSound() {
 
             function validarCamposAntesDeImprimir() {
     const inputs = document.querySelectorAll(".cantidadInput");
-    let valid = true;
+    let valid = false;
 
     inputs.forEach(input => {
         if (input.value === "" || isNaN(input.value) || input.value <= 0) {
