@@ -266,7 +266,7 @@ function generarPDF() {
 
         doc.setFont('helvetica', 'bold');
          doc.text('SECCIÓN:', xOffset + 10, yOffset + 50);
-        doc.text('FECHA:', xOffset + valeWidth - 50, yOffset + 50);
+        doc.text(`FECHA: ${fechaActual}`, xOffset + valeWidth - 50, yOffset + 50);
         doc.line(xOffset + 35, yOffset + 50, xOffset + valeWidth / 2 - 10, yOffset + 50);
         doc.line(xOffset + valeWidth / 2 + 20, yOffset + 50, xOffset + valeWidth - 10, yOffset + 50);
 
