@@ -220,23 +220,16 @@ function bloquearInputs(bloquear) {
     });
 }
    function validarCamposAntesDeImprimir() {
-    const cantidadInputs = document.querySelectorAll(".cantidadInput");
-    const seccionInput = document.getElementById("inputSeccion");
-
+    const inputs = document.querySelectorAll(".cantidadInput, #inputSeccion");
     let valid = true;
 
-    // Validar los inputs de cantidad
-    cantidadInputs.forEach(input => {
-        let valor = parseFloat(input.value.trim()); // Convertir a número
-        if (isNaN(valor) || valor <= 0) {
+    inputs.forEach(input => {
+        let valor = input.value.trim(); // Elimina espacios en blanco
+
+        if (valor === "" || (input.classList.contains("cantidadInput") && (isNaN(valor) || Number(valor) <= 0))) {
             valid = false;
         }
     });
-
-    // Validar el input de sección (no debe estar vacío)
-    if (seccionInput.value.trim() === "") {
-        valid = false;
-    }
 
     if (valid) {
         bloquearInputs(true);
