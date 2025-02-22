@@ -282,16 +282,16 @@ function generarPDF() {
     img.crossOrigin = "Anonymous";
     img.onload = function () {
         doc.addImage(img, "JPEG", 10, 10, 40, 20); // (x, y, ancho, alto)
-        agregarVale(10);
-        agregarVale(pageWidth / 2 + 5); // Vale derecho
-        doc.save('Vale_Almacen.pdf');
+        agregarVale(10, 10); // Vale izquierdo
+agregarVale(pageWidth / 2 + 5, 10); // Vale derecho
+doc.save('Vale_Almacen.pdf');
     };
 
     img.onerror = function () {
         console.error("No se pudo cargar el logo.");
-        agregarVale(10);
-        agregarVale(halfHeight + 5);
-        doc.save('Vale_Almacen.pdf');
+        agregarVale(10, 10); // Vale izquierdo
+agregarVale(pageWidth / 2 + 5, 10); // Vale derecho
+doc.save('Vale_Almacen.pdf');
     };
 }
 
