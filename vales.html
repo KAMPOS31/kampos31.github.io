@@ -244,36 +244,36 @@ function generarPDF() {
     const halfHeight = pageHeight / 2;
     const logoUrl = "https://raw.githubusercontent.com/KAMPOS31/kampos31.github.io/main/Imagen1.jpg";
 
-    function agregarVale(yOffset) {
+    function agregarVale(xOffset) {
         doc.setDrawColor(150, 0, 50);
         doc.setLineWidth(1);
-        doc.rect(10, yOffset, pageWidth - 20, halfHeight - 10);
+        doc.rect(10, xOffset, pageWidth - 20, halfHeight - 10);
 
         doc.setFontSize(16);
         doc.setFont('helvetica', 'bold');
-        doc.text('VALE DE ALMACÉN', pageWidth / 2, yOffset + 15, { align: 'center' });
+        doc.text('VALE DE ALMACÉN', pageWidth / 2, xOffset + 15, { align: 'center' });
         doc.setFontSize(12);
         doc.setFont('helvetica', 'normal');
-        doc.text('HABILITACIÓN', pageWidth / 2, yOffset + 25, { align: 'center' });
+        doc.text('HABILITACIÓN', pageWidth / 2, xOffset + 25, { align: 'center' });
 
         doc.setFontSize(10);
         doc.setFont('helvetica', 'bold');
-        doc.text('FOLIO', pageWidth - 60, yOffset + 15);
+        doc.text('FOLIO', pageWidth - 60, xOffset + 15);
         doc.setFont('helvetica', 'normal');
-        doc.rect(pageWidth - 70, yOffset + 10, 50, 10);
-        doc.text('7545', pageWidth - 50, yOffset + 18);
+        doc.rect(pageWidth - 70, xOffset + 10, 50, 10);
+        doc.text('7545', pageWidth - 50, xOffset + 18);
 
         doc.setFont('helvetica', 'bold');
-        doc.text('SECCIÓN:', 15, yOffset + 40);
-        doc.text('FECHA:', pageWidth / 2, yOffset + 40);
-        doc.line(35, yOffset + 40, pageWidth / 2 - 10, yOffset + 40);
-        doc.line(pageWidth / 2 + 20, yOffset + 40, pageWidth - 20, yOffset + 40);
+        doc.text('SECCIÓN:', 15, xOffset + 40);
+        doc.text('FECHA:', pageWidth / 2, xOffset + 40);
+        doc.line(35, xOffset + 40, pageWidth / 2 - 10, xOffset + 40);
+        doc.line(pageWidth / 2 + 20, xOffset + 40, pageWidth - 20, xOffset + 40);
 
         doc.setFont('helvetica', 'bold');
-        doc.text('ENTREGÓ', 40, yOffset + halfHeight - 15);
-        doc.text('RECIBIÓ', pageWidth - 60, yOffset + halfHeight - 15);
-        doc.line(15, yOffset + halfHeight - 10, 70, yOffset + halfHeight - 10);
-        doc.line(pageWidth - 90, yOffset + halfHeight - 10, pageWidth - 20, yOffset + halfHeight - 10);
+        doc.text('ENTREGÓ', 40, xOffset + halfHeight - 15);
+        doc.text('RECIBIÓ', pageWidth - 60, xOffset + halfHeight - 15);
+        doc.line(15, xOffset + halfHeight - 10, 70, xOffset + halfHeight - 10);
+        doc.line(pageWidth - 90, xOffset + halfHeight - 10, pageWidth - 20, xOffset + halfHeight - 10);
     }
 
     // Cargar la imagen antes de generar el PDF
