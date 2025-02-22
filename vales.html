@@ -200,7 +200,8 @@ function playScanSound() {
                 document.getElementById("cancelButton").style.display = confirm ? "block" : "none";
 
                 closeButton.onclick = () => {
-        alertBox.style.display = "none";
+                bloquearInputs(false);
+                alertBox.style.display = "none";
     };
                   printBtn.onclick = () => {
         generarPDF();
@@ -211,7 +212,12 @@ function playScanSound() {
           document.getElementById("printButton").addEventListener("click", function() {
                     validarCamposAntesDeImprimir();
                 });
-
+function bloquearInputs(bloquear) {
+    let inputs = document.querySelectorAll("input");
+    inputs.forEach(input => {
+        input.disabled = bloquear;
+    });
+}
             function validarCamposAntesDeImprimir() {
     const inputs = document.querySelectorAll(".cantidadInput");
     let valid = true;
@@ -224,6 +230,7 @@ function playScanSound() {
     });
 
     if (valid) {
+        bloquearInputs(true);
         mensaje2("¿Los datos son correctos?", true);
     } else {
         mensaje("Llena todos los campos para continuar.", {
