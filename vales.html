@@ -241,7 +241,8 @@ function generarPDF() {
 
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
-    const halfHeight = pageHeight / 2;
+    const valeWidth = (pageWidth / 2) - 15; // Mitad de la página con márgenes
+    const valeHeight = pageHeight - 20; // Alto del vale
     const logoUrl = "https://raw.githubusercontent.com/KAMPOS31/kampos31.github.io/main/Imagen1.jpg";
 
     function agregarVale(xOffset, yOffset){
