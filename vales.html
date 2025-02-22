@@ -270,7 +270,7 @@ function generarPDF() {
     doc.text('FOLIO', xOffset + valeWidth - 35, yOffset + 10);
         doc.setFont('helvetica', 'normal');
         doc.rect(xOffset + valeWidth - 45, yOffset + 5, 40, 10);
-        doc.text(folio.toString(), xOffset + valeWidth - 35, yOffset + 13);
+        doc.text(folio.toString(), xOffset + valeWidth - 35, yOffset + 18,{ align: "center" });
 
         doc.setFont('helvetica', 'bold');
          doc.text('SECCIÓN:', xOffset + 10, yOffset + 50);
@@ -279,12 +279,12 @@ function generarPDF() {
 
         doc.setFont('helvetica', 'bold');
        // Línea para "ENTREGÓ"
-doc.line(xOffset + 10, yOffset + valeHeight - 20, xOffset + 60, yOffset + valeHeight - 20);
-doc.text('ENTREGÓ', xOffset + 20, yOffset + valeHeight - 15);
+doc.line(xOffset + 20, yOffset + valeHeight - 20, xOffset + 50, yOffset + valeHeight - 20);
+doc.text('ENTREGÓ', xOffset + 27, yOffset + valeHeight - 15);
 
 // Línea para "RECIBIÓ"
-doc.line(xOffset + valeWidth - 80, yOffset + valeHeight - 20, xOffset + valeWidth - 10, yOffset + valeHeight - 20);
-doc.text('RECIBIÓ', xOffset + valeWidth - 50, yOffset + valeHeight - 15);
+doc.line(xOffset + valeWidth - 70, yOffset + valeHeight - 20, xOffset + valeWidth - 30, yOffset + valeHeight - 20);
+doc.text('RECIBIÓ', xOffset + valeWidth - 57, yOffset + valeHeight - 15);
     }
 
     // Cargar la imagen antes de generar el PDF
