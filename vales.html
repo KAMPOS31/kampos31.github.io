@@ -233,23 +233,54 @@ function playScanSound() {
     }
 }
 
-function generarPDF() {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-    doc.text("Reporte de Vale", 10, 10);
-    let y = 20;
-    
- const productos = document.querySelectorAll("#listaProductos li");
-    
-        productos.forEach((producto, index) => {
-        const input = producto.querySelector(".cantidadInput");
-        const cantidad = input ? input.value : "0";
-        doc.text(`${index + 1}. ${producto.innerText} - Cantidad: ${cantidad}`, 10, y);
-        y += 10;
-    });
+import jsPDF from 'jspdf';
 
-    doc.save("vale.pdf");
+function generarPDF() {
+    const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    const halfHeight = pageHeight / 2;
+    const logoUrl = "https://github.com/KAMPOS31/kampos31.github.io/blob/main/Imagen1.jpg?raw=true";
+
+    function agregarVale(yOffset) {
+        doc.setDrawColor(150, 0, 50);
+        doc.setLineWidth(1);
+        doc.rect(10, yOffset, pageWidth - 20, halfHeight - 10);
+        doc.addImage(logoUrl, "JPEG", 10, 10, 40, 20); // (x, y, ancho, alto)
+
+        doc.setFontSize(16);
+        doc.setFont('helvetica', 'bold');
+        doc.text('VALE DE ALMACÉN', pageWidth / 2, yOffset + 15, { align: 'center' });
+        doc.setFontSize(12);
+        doc.setFont('helvetica', 'normal');
+        doc.text('HABILITACIÓN', pageWidth / 2, yOffset + 25, { align: 'center' });
+        
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'bold');
+        doc.text('FOLIO', pageWidth - 60, yOffset + 15);
+        doc.setFont('helvetica', 'normal');
+        doc.rect(pageWidth - 70, yOffset + 10, 50, 10);
+        doc.text('7545', pageWidth - 50, yOffset + 18);
+        
+        doc.setFont('helvetica', 'bold');
+        doc.text('SECCIÓN:', 15, yOffset + 40);
+        doc.text('FECHA:', pageWidth / 2, yOffset + 40);
+        doc.line(35, yOffset + 40, pageWidth / 2 - 10, yOffset + 40);
+        doc.line(pageWidth / 2 + 20, yOffset + 40, pageWidth - 20, yOffset + 40);
+        
+        doc.setFont('helvetica', 'bold');
+        doc.text('ENTREGÓ', 40, yOffset + halfHeight - 15);
+        doc.text('RECIBIÓ', pageWidth - 60, yOffset + halfHeight - 15);
+        doc.line(15, yOffset + halfHeight - 10, 70, yOffset + halfHeight - 10);
+        doc.line(pageWidth - 90, yOffset + halfHeight - 10, pageWidth - 20, yOffset + halfHeight - 10);
+    }
+    
+    agregarVale(10);
+    agregarVale(halfHeight + 5);
+    
+    doc.save('Vale_Almacen.pdf');
 }
+
 
     });
     </script>
