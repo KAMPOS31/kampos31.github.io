@@ -245,6 +245,14 @@ function generarPDF() {
     const valeHeight = pageHeight - 20; // Alto del vale
     const logoUrl = "https://raw.githubusercontent.com/KAMPOS31/kampos31.github.io/main/Imagen1.jpg";
 
+     // Obtener y actualizar folio
+    let folio = localStorage.getItem("folio") ? parseInt(localStorage.getItem("folio")) : 1;
+    localStorage.setItem("folio", folio + 1); // Incrementar folio para la próxima vez
+
+    // Obtener fecha del sistema
+    const today = new Date();
+    const fechaActual = today.toLocaleDateString('es-MX');
+    
     function agregarVale(xOffset, yOffset){
         doc.setDrawColor(150, 0, 50);
         doc.setLineWidth(1);
@@ -262,7 +270,7 @@ function generarPDF() {
     doc.text('FOLIO', xOffset + valeWidth - 45, yOffset + 15);
         doc.setFont('helvetica', 'normal');
         doc.rect(xOffset + valeWidth - 55, yOffset + 10, 40, 10);
-        doc.text('7545', xOffset + valeWidth - 35, yOffset + 18);
+        doc.text(folio.toString(), xOffset + valeWidth - 40, yOffset + 18);
 
         doc.setFont('helvetica', 'bold');
          doc.text('SECCIÓN:', xOffset + 10, yOffset + 50);
