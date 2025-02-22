@@ -271,11 +271,12 @@ function generarPDF() {
         doc.line(xOffset + valeWidth / 2 + 20, yOffset + 50, xOffset + valeWidth - 10, yOffset + 50);
 
         doc.setFont('helvetica', 'bold');
-        doc.text('ENTREGÓ', xOffset + 20, yOffset + valeHeight - 15);
         doc.line(xOffset + 10, yOffset + valeHeight - 10, xOffset + 60, yOffset - 10 + valeHeight);
-
-        doc.text('RECIBIÓ', xOffset + valeWidth - 50, yOffset + valeHeight - 15);
+        doc.text('ENTREGÓ', xOffset + 20, yOffset + valeHeight - 15);
+        
         doc.line(xOffset + valeWidth - 80, yOffset + valeHeight - 10, xOffset + valeWidth - 10, yOffset + valeHeight - 10);
+        doc.text('RECIBIÓ', xOffset + valeWidth - 50, yOffset + valeHeight - 15);
+        
     }
 
     // Cargar la imagen antes de generar el PDF
