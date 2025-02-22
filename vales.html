@@ -298,6 +298,12 @@ doc.text('RECIBIÓ', xOffset + valeWidth - 57, yOffset + valeHeight - 15);
         agregarVale(10, 10); // Vale izquierdo
 agregarVale(pageWidth / 2 + 5, 10); // Vale derecho
 doc.save('Vale_Almacen.pdf');
+         const alertBox = document.getElementById("customAlert2");
+        alertBox.style.display = "none";
+         mensaje("Vale generado correctamente.", {
+            backgroundColor: "#90EE90",
+            textColor: "#006400",    
+        });
     };
 
     img.onerror = function () {
