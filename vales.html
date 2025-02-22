@@ -265,6 +265,16 @@ function generarPDF() {
     // Obtener fecha del sistema
     const today = new Date();
     const fechaActual = today.toLocaleDateString('es-MX');
+
+     // Obtener los productos desde los divs
+    const productos = [];
+    document.querySelectorAll(".producto").forEach(div => {
+        const descripcion = div.querySelector(".descripcion").textContent.trim();
+        const cantidad = div.querySelector(".cantidadInput").value.trim();
+        if (cantidad && cantidad > 0) {
+            productos.push({ descripcion, cantidad });
+        }
+    });
     
     function agregarVale(xOffset, yOffset){
         doc.setDrawColor(150, 0, 50);
@@ -291,7 +301,25 @@ function generarPDF() {
         const seccion = document.getElementById("inputSeccion").value || "N/A"; // Si está vacío, muestra "N/A"
         doc.text(`SECCIÓN: ${seccion}`, xOffset + 10, yOffset + 50);
         doc.text(`FECHA: ${fechaActual}`, xOffset + valeWidth - 50, yOffset + 50);
-        
+
+        // Línea separadora
+        doc.line(xOffset + 10, yOffset + 55, xOffset + valeWidth - 10, yOffset + 55);
+
+        // Tabla de productos
+        let startY = yOffset + 60;
+        doc.setFont('helvetica', 'bold');
+        doc.text("CANTIDAD", xOffset + 10, startY);
+        doc.text("DESCRIPCIÓN", xOffset + 40, startY);
+        doc.setFont('helvetica', 'normal');
+
+        startY += 5;
+        productos.forEach(producto => {
+            doc.text(producto.cantidad, xOffset + 10, startY);
+            doc.text(producto.descripcion, xOffset + 40, startY);
+            startY += 5;
+        });
+
+        // Firmas
         doc.setFont('helvetica', 'bold');
        // Línea para "ENTREGÓ"
 doc.line(xOffset + 20, yOffset + valeHeight - 20, xOffset + 50, yOffset + valeHeight - 20);
