@@ -22,8 +22,8 @@
     <div id="productCard" class="card" style="display: none;">
     <h2>ARTICULOS</h2>
     <p><strong>Código: </strong><br><span id="codigo"></span></p><br>
-<p><strong>Sección: </strong><input type="text" id="inputSeccion" class="cantidadInput" placeholder="Ingrese sección"></p>    
-        <p><strong>Relación de Productos</strong></p>
+     <p><strong>Sección: </strong><span id="seccion"></span><input type="text" id="inputSeccion" placeholder="Ingrese sección"></p>
+    <p><strong>Relación de Productos</strong></p>
     <ul id="listaProductos"></ul> <!-- Aquí se mostrarán las descripciones -->
     <button id="printButton" style="display: none;"><i class="fas fa-print"></i> Imprimir Vale</button>
 </div> 
@@ -219,14 +219,13 @@ function bloquearInputs(bloquear) {
         input.disabled = bloquear;
     });
 }
-   function validarCamposAntesDeImprimir() {
-    const inputs = document.querySelectorAll(".cantidadInput, #inputSeccion");
+            function validarCamposAntesDeImprimir() {
+    const inputs = document.querySelectorAll(".cantidadInput");
     let valid = true;
 
     inputs.forEach(input => {
-        let valor = input.value.trim(); // Elimina espacios en blanco
-
-        if (valor === "" || (input.classList.contains("cantidadInput") && (isNaN(valor) || Number(valor) <= 0))) {
+        let valor = Number(input.value);
+        if (isNaN(valor) || valor <= 0) {
             valid = false;
         }
     });
@@ -241,7 +240,9 @@ function bloquearInputs(bloquear) {
         });
     }
 }
-            
+
+
+
 function generarPDF() {
     const { jsPDF } = window.jspdf; // Importar jsPDF desde el objeto global
     const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
