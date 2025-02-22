@@ -283,6 +283,7 @@ function generarPDF() {
     img.onload = function () {
         doc.addImage(img, "JPEG", 10, 10, 40, 20); // (x, y, ancho, alto)
         agregarVale(10);
+        agregarVale(pageWidth / 2 + 5); // Segundo vale en la derecha
         agregarVale(halfHeight + 5);
         doc.save('Vale_Almacen.pdf');
     };
