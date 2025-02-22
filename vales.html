@@ -221,11 +221,13 @@ function bloquearInputs(bloquear) {
 }
             function validarCamposAntesDeImprimir() {
 const inputs = document.querySelectorAll(".cantidadInput, #inputSeccion");
+const inputs2 = document.querySelectorAll(".inputSeccion");
     let valid = true;
 
     inputs.forEach(input => {
         let valor = Number(input.value);
-        if (isNaN(valor) || valor <= 0) {
+        let valor2 = input.value;
+        if (isNaN(valor) || valor <= 0 && valor2 === "") {
             valid = false;
         }
     });
