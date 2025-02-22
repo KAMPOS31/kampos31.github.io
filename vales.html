@@ -259,22 +259,23 @@ function generarPDF() {
 
         doc.setFontSize(10);
         doc.setFont('helvetica', 'bold');
-    doc.text('FOLIO', xOffset + valeWidth - 50, yOffset + 20);
+    doc.text('FOLIO', xOffset + valeWidth - 45, yOffset + 15);
         doc.setFont('helvetica', 'normal');
-       doc.rect(xOffset + valeWidth - 60, yOffset + 15, 40, 10);
-    doc.text('7545', xOffset + valeWidth - 40, yOffset + 23);
+        doc.rect(xOffset + valeWidth - 55, yOffset + 10, 40, 10);
+        doc.text('7545', xOffset + valeWidth - 35, yOffset + 18);
 
         doc.setFont('helvetica', 'bold');
          doc.text('SECCIÓN:', xOffset + 10, yOffset + 50);
-    doc.text('FECHA:', xOffset + valeWidth - 50, yOffset + 50);
-    doc.line(xOffset + 35, yOffset + 50, xOffset + valeWidth / 2 - 10, yOffset + 50);
-    doc.line(xOffset + valeWidth / 2 + 20, yOffset + 50, xOffset + valeWidth - 10, yOffset + 50);
+        doc.text('FECHA:', xOffset + valeWidth - 50, yOffset + 50);
+        doc.line(xOffset + 35, yOffset + 50, xOffset + valeWidth / 2 - 10, yOffset + 50);
+        doc.line(xOffset + valeWidth / 2 + 20, yOffset + 50, xOffset + valeWidth - 10, yOffset + 50);
 
         doc.setFont('helvetica', 'bold');
-       doc.text('ENTREGÓ', xOffset + 20, yOffset + valeHeight - 10);
-    doc.text('RECIBIÓ', xOffset + valeWidth - 50, yOffset + valeHeight - 10);
-    doc.line(xOffset + 10, yOffset + valeHeight - 5, xOffset + 60, yOffset + valeHeight - 5);
-    doc.line(xOffset + valeWidth - 80, yOffset + valeHeight - 5, xOffset + valeWidth - 10, yOffset + valeHeight - 5);
+        doc.text('ENTREGÓ', xOffset + 20, yOffset + valeHeight - 15);
+        doc.line(xOffset + 10, yOffset + valeHeight - 10, xOffset + 60, yOffset - 10 + valeHeight);
+
+        doc.text('RECIBIÓ', xOffset + valeWidth - 50, yOffset + valeHeight - 15);
+        doc.line(xOffset + valeWidth - 80, yOffset + valeHeight - 10, xOffset + valeWidth - 10, yOffset + valeHeight - 10);
     }
 
     // Cargar la imagen antes de generar el PDF
