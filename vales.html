@@ -267,11 +267,11 @@ function generarPDF() {
 
         doc.setFontSize(10);
         doc.setFont('helvetica', 'bold');
-    doc.text('FOLIO', xOffset + valeWidth - 50, yOffset + 12);
+    doc.text('FOLIO', xOffset + valeWidth - 45, yOffset + 10);
         doc.setFont('helvetica', 'normal');
-        doc.rect(xOffset + valeWidth - 60, yOffset + 7, 45, 12);
-        const folioX = xOffset + valeWidth - 60 + 22.5; // Centrado horizontalmente dentro del cuadro
-        const folioY = yOffset + 16; // Centrado verticalmente dentro del cuadro
+        doc.rect(xOffset + valeWidth - 55, yOffset + 5, 45, 12);
+        const folioX = xOffset + valeWidth - 55 + 22.5; // Centrado horizontalmente dentro del cuadro
+        const folioY = yOffset + 14; // Centrado verticalmente dentro del cuadro
         doc.text(folio.toString(), folioX, folioY, { align: "center" });
         
         doc.setFont('helvetica', 'bold');
