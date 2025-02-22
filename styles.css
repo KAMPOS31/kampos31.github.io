@@ -28,6 +28,22 @@
 .custom-alert button:hover {
     background-color: #ff7878;
 }
+#confirmPrintButton {
+    background-color: #28a745; /* Verde */
+    color: white;
+}
+
+#cancelButton {
+    background-color: #dc3545; /* Rojo */
+    color: white;
+}
+
+#buttonContainer {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+}
         /* General Styles */
         body {
             font-family: 'Roboto', Arial, sans-serif;
