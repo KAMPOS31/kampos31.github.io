@@ -240,14 +240,13 @@ function generarPDF() {
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
     const halfHeight = pageHeight / 2;
-    const logoUrl = "https://github.com/KAMPOS31/kampos31.github.io/blob/main/Imagen1.jpg?raw=true";
+   
 
     function agregarVale(yOffset) {
         doc.setDrawColor(150, 0, 50);
         doc.setLineWidth(1);
         doc.rect(10, yOffset, pageWidth - 20, halfHeight - 10);
-        doc.addImage(logoUrl, "JPEG", 10, 10, 40, 20); // (x, y, ancho, alto)
-
+        
         doc.setFontSize(16);
         doc.setFont('helvetica', 'bold');
         doc.text('VALE DE ALMACÉN', pageWidth / 2, yOffset + 15, { align: 'center' });
