@@ -267,11 +267,13 @@ function generarPDF() {
 
         doc.setFontSize(10);
         doc.setFont('helvetica', 'bold');
-    doc.text('FOLIO', xOffset + valeWidth - 45, yOffset + 12);
+    doc.text('FOLIO', xOffset + valeWidth - 50, yOffset + 12);
         doc.setFont('helvetica', 'normal');
-        doc.rect(xOffset + valeWidth - 55, yOffset + 15, 40, 10);
-        doc.text(folio.toString(), xOffset + valeWidth - 35, yOffset + 22,{ align: "center" });
-
+        doc.rect(xOffset + valeWidth - 60, yOffset + 7, 45, 12);
+        const folioX = xOffset + valeWidth - 60 + 22.5; // Centrado horizontalmente dentro del cuadro
+        const folioY = yOffset + 16; // Centrado verticalmente dentro del cuadro
+        doc.text(folio.toString(), folioX, folioY, { align: "center" });
+        
         doc.setFont('helvetica', 'bold');
          doc.text('SECCIÓN:', xOffset + 10, yOffset + 50);
         doc.text(`FECHA: ${fechaActual}`, xOffset + valeWidth - 50, yOffset + 50);
