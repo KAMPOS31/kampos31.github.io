@@ -219,16 +219,23 @@ function bloquearInputs(bloquear) {
         input.disabled = bloquear;
     });
 }
-            function validarCamposAntesDeImprimir() {
-    const inputs = document.querySelectorAll(".cantidadInput");
+     function validarCamposAntesDeImprimir() {
+    const inputs = document.querySelectorAll(".cantidadInput"); 
+    const inputSeccion = document.getElementById("inputSeccion");
     let valid = true;
 
+    // Validar los inputs de cantidad
     inputs.forEach(input => {
         let valor = Number(input.value);
         if (isNaN(valor) || valor <= 0) {
             valid = false;
         }
     });
+
+    // Validar el input de sección
+    if (!inputSeccion.value.trim()) { // Si está vacío o solo tiene espacios
+        valid = false;
+    }
 
     if (valid) {
         bloquearInputs(true);
@@ -240,9 +247,7 @@ function bloquearInputs(bloquear) {
         });
     }
 }
-
-
-
+            
 function generarPDF() {
     const { jsPDF } = window.jspdf; // Importar jsPDF desde el objeto global
     const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
