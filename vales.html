@@ -184,6 +184,15 @@ function playScanSound() {
                 const alertMessage = document.getElementById("alertMessage2");
                 const closeButton = document.getElementById("cancelButton");
                 const printBtn = document.getElementById("confirmPrintButton");
+
+                 // Aplicar estilos
+                alertBox.style.backgroundColor = "#fff3cd"; // Fondo amarillo
+                alertBox.style.border = "2px solid #856404"; // Borde oscuro
+                alertMessage.style.color = "#856404"; // Texto oscuro
+                alertBox.style.padding = "15px";
+                alertBox.style.borderRadius = "10px";
+                alertBox.style.textAlign = "center";
+                alertBox.style.display = "block";
                 
                 alertMessage.innerText = message;
                 alertBox.style.display = "block";
