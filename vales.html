@@ -219,22 +219,24 @@ function bloquearInputs(bloquear) {
         input.disabled = bloquear;
     });
 }
-     function validarCamposAntesDeImprimir() {
-    const inputs = document.querySelectorAll(".cantidadInput, #inputSeccion");
+   function validarCamposAntesDeImprimir() {
+    const cantidadInputs = document.querySelectorAll(".cantidadInput");
+    const seccionInput = document.getElementById("inputSeccion");
+
     let valid = true;
 
-    inputs.forEach(input => {
-        let valor = input.value.trim(); // Elimina espacios vacíos
-
-        if (input.classList.contains("cantidadInput")) {
-            let numValor = Number(valor);
-            if (isNaN(numValor) || numValor <= 0) {
-                valid = false;
-            }
-        } else if (input.id === "inputSeccion" && valor === "") {
+    // Validar los inputs de cantidad
+    cantidadInputs.forEach(input => {
+        let valor = parseFloat(input.value.trim()); // Convertir a número
+        if (isNaN(valor) || valor <= 0) {
             valid = false;
         }
     });
+
+    // Validar el input de sección (no debe estar vacío)
+    if (seccionInput.value.trim() === "") {
+        valid = false;
+    }
 
     if (valid) {
         bloquearInputs(true);
