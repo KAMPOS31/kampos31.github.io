@@ -270,7 +270,7 @@ function generarPDF() {
     doc.text('FOLIO', xOffset + valeWidth - 35, yOffset + 10);
         doc.setFont('helvetica', 'normal');
         doc.rect(xOffset + valeWidth - 45, yOffset + 5, 40, 10);
-        doc.text(folio.toString(), xOffset + valeWidth - 30, yOffset + 18);
+        doc.text(folio.toString(), xOffset + valeWidth - 35, yOffset + 13);
 
         doc.setFont('helvetica', 'bold');
          doc.text('SECCIÓN:', xOffset + 10, yOffset + 50);
@@ -278,14 +278,13 @@ function generarPDF() {
         doc.line(xOffset + 35, yOffset + 50, xOffset + valeWidth / 2 - 10, yOffset + 50);
 
         doc.setFont('helvetica', 'bold');
-        
-        const firmaY = yOffset + valeHeight - 30; // Ajustar altura de las líneas
-        doc.line(xOffset + 10, firmaY, xOffset + 60, firmaY); // Línea de "ENTREGÓ"
-        doc.text('ENTREGÓ', xOffset + 20, firmaY - 5); // Texto encima de la línea
+       // Línea para "ENTREGÓ"
+doc.line(xOffset + 10, yOffset + valeHeight - 20, xOffset + 60, yOffset + valeHeight - 20);
+doc.text('ENTREGÓ', xOffset + 20, yOffset + valeHeight - 15);
 
-        doc.line(xOffset + valeWidth - 80, firmaY, xOffset + valeWidth - 10, firmaY); // Línea de "RECIBIÓ"
-        doc.text('RECIBIÓ', xOffset + valeWidth - 50, firmaY - 5); // Texto encima de la línea
-        
+// Línea para "RECIBIÓ"
+doc.line(xOffset + valeWidth - 80, yOffset + valeHeight - 20, xOffset + valeWidth - 10, yOffset + valeHeight - 20);
+doc.text('RECIBIÓ', xOffset + valeWidth - 50, yOffset + valeHeight - 15);
     }
 
     // Cargar la imagen antes de generar el PDF
