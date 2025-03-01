@@ -314,23 +314,31 @@ function generarPDF() {
             doc.text("No hay productos agregados", xOffset + 10, yOffset + 65);
             doc.setTextColor(0, 0, 0); // Restaurar color a negro
         } else {
+              // Tabla de productos
+            let startY = yOffset + 60;
+            doc.setFont('helvetica', 'bold');
+            doc.text("CANTIDAD", xOffset + 10, startY);
+            doc.text("DESCRIPCIÓN", xOffset + 40, startY);
+            doc.setFont('helvetica', 'normal');
+
+            startY += 5;
             // Posición inicial para los productos
     let espacioDisponible = yOffset + 60; 
 
-    productos.forEach((producto, index) => {
-         const descripcion = producto.descripcion;  // Cambié "Descripción" a "descripcion"
+  productos.forEach(producto => {
+    const descripcion = producto.descripcion;  
     const cantidad = producto.cantidad;
 
-        const maxWidth = valeWidth - 40; // Limitar ancho del texto
-        const descripcionAjustada = doc.splitTextToSize(descripcion, maxWidth);
+    const maxWidth = valeWidth - 40; // Limitar ancho del texto
+    const descripcionAjustada = doc.splitTextToSize(descripcion, maxWidth);
 
-        doc.setFontSize(10);
-        doc.text(`${index + 1}. ${cantidad} -`, xOffset + 10, espacioDisponible);
-        doc.text(descripcionAjustada, xOffset + 40, espacioDisponible);
-        
-        // Ajustar la altura según la cantidad de líneas que ocupe el texto
-        espacioDisponible += 5 * descripcionAjustada.length; 
-    });
+    doc.setFontSize(10);
+    doc.text(`${cantidad}`, xOffset + 10, espacioDisponible); 
+    doc.text(descripcionAjustada, xOffset + 40, espacioDisponible);
+    
+    // Ajustar la altura según la cantidad de líneas que ocupe el texto
+    espacioDisponible += 5 * descripcionAjustada.length; 
+});
         }
 
         // Firmas
