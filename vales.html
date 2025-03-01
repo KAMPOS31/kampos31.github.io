@@ -318,8 +318,8 @@ function generarPDF() {
     let espacioDisponible = yOffset + 60; 
 
     productos.forEach((producto, index) => {
-        const descripcion = producto["Descripción"];
-        const cantidad = producto["Cantidad"];
+         const descripcion = producto.descripcion;  // Cambié "Descripción" a "descripcion"
+    const cantidad = producto.cantidad;
 
         const maxWidth = valeWidth - 40; // Limitar ancho del texto
         const descripcionAjustada = doc.splitTextToSize(descripcion, maxWidth);
