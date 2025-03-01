@@ -266,12 +266,14 @@ function generarPDF() {
     const today = new Date();
     const fechaActual = today.toLocaleDateString('es-MX');
 
-     // Obtener los productos desde los divs
-    const productos = [];
-    document.querySelectorAll(".producto").forEach(div => {
-        const descripcion = div.querySelector(".descripcion").textContent.trim();
-        const cantidad = div.querySelector(".cantidadInput").value.trim();
-        if (cantidad && cantidad > 0) {
+      // Obtener los productos correctamente
+    let productos = [];
+    document.querySelectorAll(".cantidadInput").forEach(input => {
+        const cantidad = input.value.trim();
+        const descripcionElem = input.nextElementSibling; // El siguiente elemento debe ser la descripción
+
+        if (descripcionElem && cantidad !== "" && cantidad > 0) {
+            const descripcion = descripcionElem.textContent.trim();
             productos.push({ descripcion, cantidad });
         }
     });
@@ -305,19 +307,27 @@ function generarPDF() {
         // Línea separadora
         doc.line(xOffset + 10, yOffset + 55, xOffset + valeWidth - 10, yOffset + 55);
 
-        // Tabla de productos
-        let startY = yOffset + 60;
-        doc.setFont('helvetica', 'bold');
-        doc.text("CANTIDAD", xOffset + 10, startY);
-        doc.text("DESCRIPCIÓN", xOffset + 40, startY);
-        doc.setFont('helvetica', 'normal');
+       // Verificar si hay productos
+        if (productos.length === 0) {
+            doc.setFontSize(10);
+            doc.setTextColor(255, 0, 0); // Texto en rojo si no hay productos
+            doc.text("No hay productos agregados", xOffset + 10, yOffset + 65);
+            doc.setTextColor(0, 0, 0); // Restaurar color a negro
+        } else {
+            // Tabla de productos
+            let startY = yOffset + 60;
+            doc.setFont('helvetica', 'bold');
+            doc.text("CANTIDAD", xOffset + 10, startY);
+            doc.text("DESCRIPCIÓN", xOffset + 40, startY);
+            doc.setFont('helvetica', 'normal');
 
-        startY += 5;
-        productos.forEach(producto => {
-            doc.text(producto.cantidad, xOffset + 10, startY);
-            doc.text(producto.descripcion, xOffset + 40, startY);
             startY += 5;
-        });
+            productos.forEach(producto => {
+                doc.text(producto.cantidad, xOffset + 10, startY);
+                doc.text(producto.descripcion, xOffset + 40, startY);
+                startY += 5;
+            });
+        }
 
         // Firmas
         doc.setFont('helvetica', 'bold');
