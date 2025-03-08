@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vales de Empaque</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <h1 id="title">Generador de Vales</h1>
+    <button id="startButton"><i class="fas fa-qrcode"></i> Escanear QR</button>
+    <div id="reader"><p>Coloca el código QR frente a la cámara</p></div>
+    <p id="loading" style="display: none;">Cargando...</p>
+    <label for="fileInput" class="custom-file-upload"><i class="fas fa-file-upload"></i> CARGAR EXCEL</label>
+    <input type="file" id="fileInput" style="display: none;" />
+    <div id="infoTitle"><i class="fas fa-info-circle"></i> Información del Vale</div>
+    
+    <div id="productCard" class="card" style="display: none;">
+    <h2>ARTICULOS</h2>
+    <p><strong>Código: </strong><br><span id="codigo"></span></p><br>
+     <p><strong>Sección: </strong><span id="seccion"></span><input type="text" id="inputSeccion" class="input-estilo" placeholder="Ingrese sección"></p>
+    <p><strong>Relación de Productos</strong></p>
+    <ul id="listaProductos"></ul> <!-- Aquí se mostrarán las descripciones -->
+
+                      <!-- HTML OBSERVACIONES -->
+     <label for="inputObservaciones"><strong>Observaciones:</strong></label>
+    <textarea id="inputObservaciones" class="input-estilo" rows="3" placeholder="Escribe aquí..."></textarea>  
+        
+    <button id="printButton" style="display: none;"><i class="fas fa-print"></i> Imprimir Vale</button>
+</div> 
+    
+    <button id="backButton" style="display: none;"><i class="fas fa-arrow-left"></i> Regresar</button>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+        const html5QrCode = new Html5Qrcode("reader");
+        let excelData = [];   
+        function toggleView(showCard) {
+            document.getElementById("productCard").style.display = showCard ? "block" : "none";
+            document.getElementById("infoTitle").style.display = showCard ? "block" : "none";
+            document.getElementById("title").style.display = showCard ? "none" : "block";
+            document.getElementById("reader").style.display = showCard ? "none" : "block";
+            document.querySelector(".custom-file-upload").style.visibility = "hidden";
+            document.getElementById("fileInput").style.display = "none";
+            document.getElementById("startButton").style.display = showCard ? "none" : "block";
+            document.getElementById("backButton").style.display = showCard ? "block" : "none";
+            document.getElementById("listaProductos").style.display = showCard ? "block" : "none";
+            document.getElementById("inputObservaciones").style.display = showCard ? "block" : "none";
+            document.getElementById("printButton").style.display = showCard ? "block" : "none";
+        }
+    
+        function showMessage(message) {
+            const loading = document.getElementById("loading");
+            loading.style.display = "block";
+            loading.innerText = message;
+            setTimeout(() => {
+                loading.style.display = "none";
+                loading.innerText = "Cargando...";
+            }, 3000);
+        }
+          function mensaje(message, options = {}) {
+    const alertBox = document.getElementById("customAlert");
+    const alertMessage = document.getElementById("alertMessage");
+    const closeButton = document.getElementById("closeAlertButton");
+
+    // Configurar mensaje
+    alertMessage.innerText = message;
+
+    // Aplicar estilos personalizados
+    if (options.backgroundColor) {
+        alertBox.style.backgroundColor = options.backgroundColor;
+    }
+    if (options.textColor) {
+        alertMessage.style.color = options.textColor;
+    }
+
+    // Mostrar el contenedor
+    alertBox.style.display = "block";
+
+    // Cerrar el mensaje al hacer clic en el botón
+    closeButton.onclick = () => {
+        alertBox.style.display = "none";
+    };
+}   
+        function validateExcelColumns(data) {
+            const requiredColumns = ["Descripción"];
+            return requiredColumns.every(column => column in data[0]);
+        }
+
+        document.getElementById("fileInput").addEventListener("change", function(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, { type: "array" });
+                const sheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[sheetName];
+                excelData = XLSX.utils.sheet_to_json(worksheet);
+
+                if (!validateExcelColumns(excelData)) {
+                    mensaje("Archivo inválido. Verifica el formato.", {
+            backgroundColor: "#f8d7da", // Fondo rojo claro
+            textColor: "#721c24",      // Texto rojo oscuro
+        });
+                    excelData = [];
+                }
+            };
+
+            reader.readAsArrayBuffer(file);
+        });
+
+        function searchProduct(qrCode) {
+             let contador = 1; // Iniciar el contador en 1
+           if (qrCode === "OSLIMCAB") {
+        let productosEncontrados = [];
+        let codigosBuscados = ["OP-COL-NE", "CERI-SLIM-CABALLERO", "ESTICK-NEG-OPT", "FIT-OPT-SLIM", "PLAST2\"", "45X45C110", "CINTRANS48X150", "CINTRASIV"];
+
+        codigosBuscados.forEach(codigo => {
+            let producto = excelData.find(item => item["Código"] === codigo);
+             document.getElementById("codigo").innerText = qrCode;
+            if (producto) {
+                  productosEncontrados.push(`
+        <div style="display: flex; align-items: center; margin-bottom: 10px;">
+            <span style="font-size: 18px; font-weight: bold; margin-right: 10px;">${contador}.</span>
+            <input type="number" class="cantidadInput" min="0" value=""
+                style="width: 70px; height: 35px; font-size: 16px; text-align: center; border-radius: 8px;
+                border: 2px solid #007bff; outline: none; padding: 5px; margin-right: 15px;">
+            <span style="font-size: 18px; font-weight: bold;">${producto["Descripción"]}</span>
+        </div>
+    `);
+    contador++; // Incrementar el número para el siguiente elemento
+            }
+        });
+
+        console.log("Productos encontrados:", productosEncontrados);
+
+        if (productosEncontrados.length > 0) {
+            let listaHtml = productosEncontrados.map(desc => `<li>${desc}</li>`).join("");
+            document.getElementById("listaProductos").innerHTML = listaHtml;
+            toggleView(true);
+        } else {
+            mensaje("No se encontraron productos en el archivo Excel.", { backgroundColor: "#ffdd99", textColor: "#333333" });
+        }
+    } else {
+        mensaje("Código QR no válido.", { backgroundColor: "#ffdd99", textColor: "#333333" });
+    }
+        }
+            
+function playScanSound() {
+    const audio = new Audio("https://github.com/KAMPOS31/kampos31.github.io/raw/refs/heads/main/beep.mp3"); // URL del archivo en línea
+    audio.play().catch(err => {
+        console.warn("El sonido no pudo reproducirse automáticamente:", err);
+    });
+}
+
+        document.getElementById("startButton").addEventListener("click", function() {
+             if (excelData.length === 0) {
+        mensaje("Por favor, carga un archivo Excel antes de iniciar el escaneo.", {
+            backgroundColor: "#f8d7da", // Fondo rojo claro
+            textColor: "#721c24",      // Texto rojo oscuro
+        });
+        return;
+    }
+            html5QrCode.start(
+                { facingMode: "environment" },
+                { fps: 10, qrbox: 250 },
+                qrCodeMessage => {
+                   playScanSound();
+                    searchProduct(qrCodeMessage);
+                    html5QrCode.stop();
+                },
+                errorMessage => console.error("Error de escaneo", errorMessage)
+            ).catch(err => {
+                showMessage("Error al iniciar el escáner.");
+                console.error("Error:", err);
+            });
+        });
+
+        document.getElementById("backButton").addEventListener("click", function() {
+            toggleView(false);
+        });
+
+
+            function mensaje2(message, confirm = false) {
+                const alertBox = document.getElementById("customAlert2");
+                const alertMessage = document.getElementById("alertMessage2");
+                const closeButton = document.getElementById("cancelButton");
+                const printBtn = document.getElementById("confirmPrintButton");
+
+                 // Aplicar estilos
+                alertBox.style.backgroundColor = "#fff3cd"; // Fondo amarillo
+                alertBox.style.border = "2px solid #856404"; // Borde oscuro
+                alertMessage.style.color = "#856404"; // Texto oscuro
+                alertBox.style.padding = "15px";
+                alertBox.style.borderRadius = "10px";
+                alertBox.style.textAlign = "center";
+                alertBox.style.display = "block";
+                
+                alertMessage.innerText = message;
+                alertBox.style.display = "block";
+                document.getElementById("confirmPrintButton").style.display = confirm ? "block" : "none";
+                document.getElementById("cancelButton").style.display = confirm ? "block" : "none";
+
+                closeButton.onclick = () => {
+                bloquearInputs(false);
+                alertBox.style.display = "none";
+    };
+                  printBtn.onclick = () => {
+        generarPDF();
+    };
+            }
+
+            
+          document.getElementById("printButton").addEventListener("click", function() {
+                    validarCamposAntesDeImprimir();
+                });
+function bloquearInputs(bloquear) {
+    let inputs = document.querySelectorAll("input,textarea");
+    inputs.forEach(input => {
+        input.disabled = bloquear;
+    });
+}
+     function validarCamposAntesDeImprimir() {
+    const inputs = document.querySelectorAll(".cantidadInput"); 
+    const inputSeccion = document.getElementById("inputSeccion");
+    const inputObservaciones = document.getElementById("inputObservaciones");
+         
+    let valid = true;
+
+    // Validar los inputs de cantidad
+    inputs.forEach(input => {
+        let valor = Number(input.value);
+        if (isNaN(valor) || valor <= 0) {
+            valid = false;
+        }
+    });
+
+    // Validar el input de sección
+    if (!inputSeccion.value.trim()) { // Si está vacío o solo tiene espacios
+        valid = false;
+    }
+         
+     // Validar el input de observaciones
+    if (!inputObservaciones.value.trim()) { // Si está vacío o solo tiene espacios
+        valid = false;
+    }
+         
+    if (valid) {
+        bloquearInputs(true);
+        mensaje2("¿Los datos son correctos?", true);
+    } else {
+        mensaje("Llena todos los campos para continuar.", {
+            backgroundColor: "#f8d7da", // Fondo rojo claro
+            textColor: "#721c24",      // Texto rojo oscuro
+        });
+    }
+}
+            
+function generarPDF() {
+    const { jsPDF } = window.jspdf; // Importar jsPDF desde el objeto global
+    const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    const valeWidth = (pageWidth / 2) - 15; // Mitad de la página con márgenes
+    const valeHeight = pageHeight - 20; // Alto del vale
+    const logoUrl = "https://raw.githubusercontent.com/KAMPOS31/kampos31.github.io/main/Imagen1.jpg";
+
+     // Obtener y actualizar folio
+    let folio = localStorage.getItem("folio") ? parseInt(localStorage.getItem("folio")) : 1;
+    localStorage.setItem("folio", folio + 1); // Incrementar folio para la próxima vez
+
+    // Obtener fecha del sistema
+    const today = new Date();
+    const fechaActual = today.toLocaleDateString('es-MX');
+
+      // Obtener los productos correctamente
+    let productos = [];
+    document.querySelectorAll(".cantidadInput").forEach(input => {
+        const cantidad = input.value.trim();
+        const descripcionElem = input.nextElementSibling; // El siguiente elemento debe ser la descripción
+
+        if (descripcionElem && cantidad !== "" && cantidad > 0) {
+            const descripcion = descripcionElem.textContent.trim();
+            productos.push({ descripcion, cantidad });
+        }
+    });
+    
+    function agregarVale(xOffset, yOffset){
+        doc.setDrawColor(150, 0, 50);
+        doc.setLineWidth(1);
+    doc.rect(xOffset, yOffset, valeWidth, valeHeight); // Borde del vale
+
+        doc.setFontSize(16);
+        doc.setFont('helvetica', 'bold');
+    doc.text('VALE DE ALMACÉN', xOffset + (valeWidth / 2), yOffset + 25, { align: 'center' });
+        doc.setFontSize(12);
+        doc.setFont('helvetica', 'normal');
+    doc.text('HABILITACIÓN', xOffset + (valeWidth / 2), yOffset + 35, { align: 'center' });
+
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'bold');
+    doc.text('FOLIO', xOffset + valeWidth - 45, yOffset + 10);
+        doc.setFont('helvetica', 'normal');
+        doc.rect(xOffset + valeWidth - 55, yOffset + 5, 45, 12);
+        const folioX = xOffset + valeWidth - 55 + 22.5; // Centrado horizontalmente dentro del cuadro
+        const folioY = yOffset + 14; // Centrado verticalmente dentro del cuadro
+        doc.text(folio.toString(), folioX, folioY, { align: "center" });
+        
+        doc.setFont('helvetica', 'bold');
+        const seccion = document.getElementById("inputSeccion").value || "N/A"; // Si está vacío, muestra "N/A"
+        doc.text(`SECCIÓN: ${seccion}`, xOffset + 10, yOffset + 50);
+        doc.text(`FECHA: ${fechaActual}`, xOffset + valeWidth - 50, yOffset + 50);
+
+        // Línea separadora
+        doc.line(xOffset + 10, yOffset + 55, xOffset + valeWidth - 10, yOffset + 55);
+
+       // Verificar si hay productos
+        if (productos.length === 0) {
+            doc.setFontSize(10);
+            doc.setTextColor(255, 0, 0); // Texto en rojo si no hay productos
+            doc.text("No hay productos agregados", xOffset + 10, yOffset + 65);
+            doc.setTextColor(0, 0, 0); // Restaurar color a negro
+        } else {
+           let startY = yOffset + 60;
+doc.setFont('helvetica', 'bold');
+doc.text("CANTIDAD", xOffset + 10, startY);
+doc.text("DESCRIPCIÓN", xOffset + 40, startY);
+doc.setFont('helvetica', 'normal');
+
+// Aumentar más espacio para evitar que el primer producto se encime con los encabezados
+startY += 8; 
+
+productos.forEach(producto => {
+    const descripcion = producto.descripcion;  
+    const cantidad = producto.cantidad;
+
+    const maxWidth = valeWidth - 40; // Limitar ancho del texto
+    const descripcionAjustada = doc.splitTextToSize(descripcion, maxWidth);
+
+    doc.setFontSize(10);
+    doc.text(`${cantidad}`, xOffset + 10, startY); 
+    doc.text(descripcionAjustada, xOffset + 40, startY);
+    
+    // Ajustar la altura según la cantidad de líneas que ocupe el texto
+    startY += 5 * descripcionAjustada.length; 
+});
+        }
+                    // MOSTRAR OBSERVACIONES
+       const observaciones = document.getElementById("inputObservaciones").value || "N/A"; 
+        let espacioDisponible = yOffset + 60; // Iniciar espacio después del encabezado
+        // Determinar el espacio final después de listar los productos
+espacioDisponible += 10; // Agregar un poco de espacio después de los productos
+
+doc.setFont('helvetica', 'bold');
+doc.text("OBSERVACIONES:", xOffset + 10, espacioDisponible);
+doc.setFont('helvetica', 'normal');
+
+const maxWidthObservaciones = valeWidth - 20;
+const observacionesAjustadas = doc.splitTextToSize(observaciones, maxWidthObservaciones);
+
+// Imprimir las observaciones después de los productos
+doc.text(observacionesAjustadas, xOffset + 10, espacioDisponible + 5);
+
+// Ajustar espacioDisponible para evitar encimar texto
+espacioDisponible += observacionesAjustadas.length * 5;
+
+        
+        // Firmas
+        doc.setFont('helvetica', 'bold');
+       // Línea para "ENTREGÓ"
+doc.line(xOffset + 20, yOffset + valeHeight - 20, xOffset + 50, yOffset + valeHeight - 20);
+doc.text('ENTREGÓ', xOffset + 27, yOffset + valeHeight - 15);
+
+// Línea para "RECIBIÓ"
+doc.line(xOffset + valeWidth - 70, yOffset + valeHeight - 20, xOffset + valeWidth - 30, yOffset + valeHeight - 20);
+doc.text('RECIBIÓ', xOffset + valeWidth - 57, yOffset + valeHeight - 15);
+    }
+
+    // Cargar la imagen antes de generar el PDF
+    const img = new Image();
+    img.src = logoUrl;
+    img.crossOrigin = "Anonymous";
+    img.onload = function () {
+        doc.addImage(img, "JPEG", 10, 10, 40, 20); // (x, y, ancho, alto)
+        agregarVale(10, 10); // Vale izquierdo
+agregarVale(pageWidth / 2 + 5, 10); // Vale derecho
+doc.save('Vale_Almacen.pdf');
+         const alertBox = document.getElementById("customAlert2");
+        alertBox.style.display = "none";
+         mensaje("Vale generado correctamente.", {
+            backgroundColor: "#90EE90",
+            textColor: "#006400",    
+        });
+        toggleView(false);
+    };
+
+    img.onerror = function () {
+        console.error("No se pudo cargar el logo.");
+        agregarVale(10, 10); // Vale izquierdo
+agregarVale(pageWidth / 2 + 5, 10); // Vale derecho
+doc.save('Vale_Almacen.pdf');
+    };
+}
+
+
+    });
+    </script>
+    
+     <div id="customAlert" class="custom-alert" style="display: none;">
+    <p id="alertMessage"></p>
+    <button id="closeAlertButton"><i class="fas fa-times"></i> Cerrar</button>
+</div>
+
+             <div id="customAlert2" class="custom-alert" style="display: none;">
+        <p id="alertMessage2"></p>
+                     <div id="buttonContainer">
+        <button id="confirmPrintButton" style="display: none;"><i class="fas fa-check"></i> Imprimir</button>
+        <button id="cancelButton" style="display: none;"><i class="fas fa-times"></i> Cancelar</button>
+                             </div>
+    </div>
+    
+</body>
+</html>
