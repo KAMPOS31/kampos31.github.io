@@ -196,14 +196,13 @@
 }
 
 #inputObservaciones {
-    width: 100%;
+    width: 95%;
     height: 120px;
     font-size: 16px;
     padding: 10px;
     border-radius: 8px;
     border: 2px solid #007bff;
     outline: none;
-    resize: vertical; /* Permite ajustar la altura manualmente */
 }
         /* Animations */
         @keyframes fadeIn {
