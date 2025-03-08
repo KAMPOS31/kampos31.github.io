@@ -290,8 +290,6 @@ function generarPDF() {
             productos.push({ descripcion, cantidad });
         }
     });
-                // OBTENER OBSERVACIONES
-    const observaciones = document.getElementById("inputObservaciones").value || "N/A"; 
     
     function agregarVale(xOffset, yOffset){
         doc.setDrawColor(150, 0, 50);
@@ -354,10 +352,11 @@ productos.forEach(producto => {
 });
         }
                     // MOSTRAR OBSERVACIONES
-        let startY = yOffset + 100;
+        let startY = yOffset + 140;
         doc.setFont('helvetica', 'bold');
-doc.text("OBSERVACIONES:", xOffset + 10, startY);
-doc.setFont('helvetica', 'normal');
+        const observaciones = document.getElementById("inputObservaciones").value || "N/A"; 
+        doc.text(`OBSERVACIONES: ${observaciones}`, xOffset + 10, startY);
+        doc.setFont('helvetica', 'normal');
 
 const maxWidthObservaciones = valeWidth - 20;
 const observacionesAjustadas = doc.splitTextToSize(observaciones, maxWidthObservaciones);
