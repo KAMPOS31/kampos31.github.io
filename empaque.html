@@ -356,12 +356,7 @@ productos.forEach(producto => {
         doc.setFont('helvetica', 'bold');
         const observaciones = document.getElementById("inputObservaciones").value || "N/A"; 
         doc.text(`OBSERVACIONES: ${observaciones}`, xOffset + 10, startY);
-        doc.setFont('helvetica', 'normal');
-
-const maxWidthObservaciones = valeWidth - 20;
-const observacionesAjustadas = doc.splitTextToSize(observaciones, maxWidthObservaciones);
-doc.text(observacionesAjustadas, xOffset + 10, startY);
-
+        
         // Firmas
         doc.setFont('helvetica', 'bold');
        // Línea para "ENTREGÓ"
