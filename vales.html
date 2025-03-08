@@ -228,6 +228,8 @@ function bloquearInputs(bloquear) {
      function validarCamposAntesDeImprimir() {
     const inputs = document.querySelectorAll(".cantidadInput"); 
     const inputSeccion = document.getElementById("inputSeccion");
+    const inputObservaciones = document.getElementById("inputObservaciones");
+         
     let valid = true;
 
     // Validar los inputs de cantidad
@@ -242,7 +244,12 @@ function bloquearInputs(bloquear) {
     if (!inputSeccion.value.trim()) { // Si está vacío o solo tiene espacios
         valid = false;
     }
-
+         
+     // Validar el input de observaciones
+    if (!inputObservaciones.value.trim()) { // Si está vacío o solo tiene espacios
+        valid = false;
+    }
+         
     if (valid) {
         bloquearInputs(true);
         mensaje2("¿Los datos son correctos?", true);
