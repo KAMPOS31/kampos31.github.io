@@ -140,7 +140,7 @@
         console.log("Productos encontrados:", productosEncontrados);
 
         if (productosEncontrados.length > 0) {
-            let listaHtml = productosEncontrados.join(""); // Unir los divs directamente
+            let listaHtml = productosEncontrados.map(desc => `<li>${desc}</li>`).join("");
             document.getElementById("listaProductos").innerHTML = listaHtml;
             toggleView(true);
         } else {
