@@ -354,13 +354,14 @@ productos.forEach(producto => {
 });
         }
                     // MOSTRAR OBSERVACIONES
+        let startY = yOffset + 60;
         doc.setFont('helvetica', 'bold');
-doc.text("OBSERVACIONES:", xOffset + 10, espacioDisponible + 10);
+doc.text("OBSERVACIONES:", xOffset + 10, startY);
 doc.setFont('helvetica', 'normal');
 
 const maxWidthObservaciones = valeWidth - 20;
 const observacionesAjustadas = doc.splitTextToSize(observaciones, maxWidthObservaciones);
-doc.text(observacionesAjustadas, xOffset + 10, espacioDisponible + 15);
+doc.text(observacionesAjustadas, xOffset + 10, startY);
 
         // Firmas
         doc.setFont('helvetica', 'bold');
