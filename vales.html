@@ -220,7 +220,7 @@ function playScanSound() {
                     validarCamposAntesDeImprimir();
                 });
 function bloquearInputs(bloquear) {
-    let inputs = document.querySelectorAll("input");
+    let inputs = document.querySelectorAll("input, textarea");
     inputs.forEach(input => {
         input.disabled = bloquear;
     });
