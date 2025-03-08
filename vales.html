@@ -25,6 +25,11 @@
      <p><strong>Sección: </strong><span id="seccion"></span><input type="text" id="inputSeccion" class="input-estilo" placeholder="Ingrese sección"></p>
     <p><strong>Relación de Productos</strong></p>
     <ul id="listaProductos"></ul> <!-- Aquí se mostrarán las descripciones -->
+
+                      <!-- HTML OBSERVACIONES -->
+     <label for="inputObservaciones"><strong>Observaciones:</strong></label>
+    <textarea id="inputObservaciones" class="cantidadInput" rows="3" placeholder="Escribe aquí..."></textarea>  
+        
     <button id="printButton" style="display: none;"><i class="fas fa-print"></i> Imprimir Vale</button>
 </div> 
     
@@ -277,6 +282,8 @@ function generarPDF() {
             productos.push({ descripcion, cantidad });
         }
     });
+                // OBTENER OBSERVACIONES
+    const observaciones = document.getElementById("inputObservaciones").value || "N/A"; 
     
     function agregarVale(xOffset, yOffset){
         doc.setDrawColor(150, 0, 50);
@@ -338,6 +345,14 @@ productos.forEach(producto => {
     startY += 5 * descripcionAjustada.length; 
 });
         }
+                    // MOSTRAR OBSERVACIONES
+        doc.setFont('helvetica', 'bold');
+doc.text("OBSERVACIONES:", xOffset + 10, espacioDisponible + 10);
+doc.setFont('helvetica', 'normal');
+
+const maxWidthObservaciones = valeWidth - 20;
+const observacionesAjustadas = doc.splitTextToSize(observaciones, maxWidthObservaciones);
+doc.text(observacionesAjustadas, xOffset + 10, espacioDisponible + 15);
 
         // Firmas
         doc.setFont('helvetica', 'bold');
