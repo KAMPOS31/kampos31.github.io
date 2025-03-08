@@ -352,10 +352,24 @@ productos.forEach(producto => {
 });
         }
                     // MOSTRAR OBSERVACIONES
-        let startY = yOffset + 140;
-        doc.setFont('helvetica', 'bold');
-        const observaciones = document.getElementById("inputObservaciones").value || "N/A"; 
-        doc.text(`OBSERVACIONES: ${observaciones}`, xOffset + 10, startY);
+       const observaciones = document.getElementById("inputObservaciones").value || "N/A"; 
+        let espacioDisponible = yOffset + 60; // Iniciar espacio después del encabezado
+        // Determinar el espacio final después de listar los productos
+espacioDisponible += 10; // Agregar un poco de espacio después de los productos
+
+doc.setFont('helvetica', 'bold');
+doc.text("OBSERVACIONES:", xOffset + 10, espacioDisponible);
+doc.setFont('helvetica', 'normal');
+
+const maxWidthObservaciones = valeWidth - 20;
+const observacionesAjustadas = doc.splitTextToSize(observaciones, maxWidthObservaciones);
+
+// Imprimir las observaciones después de los productos
+doc.text(observacionesAjustadas, xOffset + 10, espacioDisponible + 5);
+
+// Ajustar espacioDisponible para evitar encimar texto
+espacioDisponible += observacionesAjustadas.length * 5;
+
         
         // Firmas
         doc.setFont('helvetica', 'bold');
