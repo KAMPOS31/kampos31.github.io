@@ -9,60 +9,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="flex items-center justify-center min-h-screen bg-gray-200">
-
+<body>
     <h1 id="title">Generador de Vales</h1>
+    <button id="startButton"><i class="fas fa-qrcode"></i> Escanear QR</button>
+    <div id="reader"><p>Coloca el código QR frente a la cámara</p></div>
+    <p id="loading" style="display: none;">Cargando...</p>
     <label for="fileInput" class="custom-file-upload"><i class="fas fa-file-upload"></i> CARGAR EXCEL</label>
     <input type="file" id="fileInput" style="display: none;" />
-    
-    <div class="w-4/5 md:w-3/5 bg-white shadow-lg rounded-xl p-6 border border-gray-300">
-        <h2 class="text-2xl font-bold text-center text-blue-600 mb-4">Selecciona una Tienda</h2>
-        <div>
-            <ul class="flex border-b">
-                <li class="mr-2">
-                    <a class="inline-block py-2 px-4 text-blue-600 font-semibold border-b-2 border-blue-600" href="#" onclick="openTab(event, 'tienda1')">Tienda 1</a>
-                </li>
-                <li class="mr-2">
-                    <a class="inline-block py-2 px-4 text-gray-600 hover:text-blue-600" href="#" onclick="openTab(event, 'tienda2')">Tienda 2</a>
-                </li>
-            </ul>
-        </div>
-        
-        <div id="tienda1" class="tab-content p-4">
-            <div class="bg-blue-50 p-4 rounded-lg shadow">
-                <button class="accordion w-full text-left font-semibold text-lg py-2">Marca A</button>
-                <div class="panel hidden p-2 border-l-2 border-blue-400">
-                    <p class="cursor-pointer p-1 hover:bg-blue-200 rounded" onclick="seleccionarElemento('Etiqueta 1A')">Etiqueta 1A</p>
-                    <p class="cursor-pointer p-1 hover:bg-blue-200 rounded" onclick="seleccionarElemento('Etiqueta 2A')">Etiqueta 2A</p>
-                </div>
-                <button class="accordion w-full text-left font-semibold text-lg py-2 mt-2">Marca B</button>
-                <div class="panel hidden p-2 border-l-2 border-blue-400">
-                    <p class="cursor-pointer p-1 hover:bg-blue-200 rounded" onclick="seleccionarElemento('Etiqueta 1B')">Etiqueta 1B</p>
-                    <p class="cursor-pointer p-1 hover:bg-blue-200 rounded" onclick="seleccionarElemento('Etiqueta 2B')">Etiqueta 2B</p>
-                </div>
-            </div>
-        </div>
-
-        <div id="tienda2" class="tab-content p-4 hidden">
-            <div class="bg-green-50 p-4 rounded-lg shadow">
-                <button class="accordion w-full text-left font-semibold text-lg py-2">Marca X</button>
-                <div class="panel hidden p-2 border-l-2 border-green-400">
-                    <p class="cursor-pointer p-1 hover:bg-green-200 rounded" onclick="seleccionarElemento('Etiqueta 1X')">Etiqueta 1X</p>
-                    <p class="cursor-pointer p-1 hover:bg-green-200 rounded" onclick="seleccionarElemento('Etiqueta 2X')">Etiqueta 2X</p>
-                </div>
-                <button class="accordion w-full text-left font-semibold text-lg py-2 mt-2">Marca Y</button>
-                <div class="panel hidden p-2 border-l-2 border-green-400">
-                    <p class="cursor-pointer p-1 hover:bg-green-200 rounded" onclick="seleccionarElemento('Etiqueta 1Y')">Etiqueta 1Y</p>
-                    <p class="cursor-pointer p-1 hover:bg-green-200 rounded" onclick="seleccionarElemento('Etiqueta 2Y')">Etiqueta 2Y</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <div id="infoTitle"><i class="fas fa-info-circle"></i> Información del Vale</div>
+    
     <div id="productCard" class="card" style="display: none;">
     <h2>ARTICULOS</h2>
     <p><strong>Código: </strong><br><span id="codigo"></span></p><br>
@@ -80,37 +36,32 @@
     <button id="backButton" style="display: none;"><i class="fas fa-arrow-left"></i> Regresar</button>
     
     <script>
-        function openTab(evt, tabName) {
-            $('.tab-content').addClass('hidden');
-            $('#' + tabName).removeClass('hidden');
-            $('ul li a').removeClass('text-blue-600 border-b-2 border-blue-600').addClass('text-gray-600 hover:text-blue-600');
-            $(evt.target).addClass('text-blue-600 border-b-2 border-blue-600');
-        }
-
-        $('.accordion').click(function() {
-            $(this).next().toggleClass('hidden');
-        });
-
-        function seleccionarElemento(etiqueta) {
-            alert('Seleccionaste: ' + etiqueta);
-        }
-        
         document.addEventListener("DOMContentLoaded", function() {
-        let excelData = [];
-
+        const html5QrCode = new Html5Qrcode("reader");
+        let excelData = [];   
         function toggleView(showCard) {
             document.getElementById("productCard").style.display = showCard ? "block" : "none";
             document.getElementById("infoTitle").style.display = showCard ? "block" : "none";
             document.getElementById("title").style.display = showCard ? "none" : "block";
+            document.getElementById("reader").style.display = showCard ? "none" : "block";
             document.querySelector(".custom-file-upload").style.visibility = "hidden";
-            
             document.getElementById("fileInput").style.display = "none";
+            document.getElementById("startButton").style.display = showCard ? "none" : "block";
             document.getElementById("backButton").style.display = showCard ? "block" : "none";
             document.getElementById("listaProductos").style.display = showCard ? "block" : "none";
             document.getElementById("inputObservaciones").style.display = showCard ? "block" : "none";
             document.getElementById("printButton").style.display = showCard ? "block" : "none";
         }
-            
+    
+        function showMessage(message) {
+            const loading = document.getElementById("loading");
+            loading.style.display = "block";
+            loading.innerText = message;
+            setTimeout(() => {
+                loading.style.display = "none";
+                loading.innerText = "Cargando...";
+            }, 3000);
+        }
           function mensaje(message, options = {}) {
     const alertBox = document.getElementById("customAlert");
     const alertMessage = document.getElementById("alertMessage");
@@ -206,6 +157,29 @@ function playScanSound() {
         console.warn("El sonido no pudo reproducirse automáticamente:", err);
     });
 }
+
+        document.getElementById("startButton").addEventListener("click", function() {
+             if (excelData.length === 0) {
+        mensaje("Por favor, carga un archivo Excel antes de iniciar el escaneo.", {
+            backgroundColor: "#f8d7da", // Fondo rojo claro
+            textColor: "#721c24",      // Texto rojo oscuro
+        });
+        return;
+    }
+            html5QrCode.start(
+                { facingMode: "environment" },
+                { fps: 10, qrbox: 250 },
+                qrCodeMessage => {
+                   playScanSound();
+                    searchProduct(qrCodeMessage);
+                    html5QrCode.stop();
+                },
+                errorMessage => console.error("Error de escaneo", errorMessage)
+            ).catch(err => {
+                showMessage("Error al iniciar el escáner.");
+                console.error("Error:", err);
+            });
+        });
 
         document.getElementById("backButton").addEventListener("click", function() {
             toggleView(false);
