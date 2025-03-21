@@ -13,7 +13,6 @@
 <body>
     <h1 id="title">Generador de Vales</h1>
 
-    <p id="loading" style="display: none;">Cargando...</p>
     <label for="fileInput" class="custom-file-upload"><i class="fas fa-file-upload"></i> CARGAR EXCEL</label>
     <input type="file" id="fileInput" style="display: none;" />
 
@@ -49,16 +48,7 @@
             document.getElementById("inputObservaciones").style.display = showCard ? "block" : "none";
             document.getElementById("printButton").style.display = showCard ? "block" : "none";
         }
-    
-        function showMessage(message) {
-            const loading = document.getElementById("loading");
-            loading.style.display = "block";
-            loading.innerText = message;
-            setTimeout(() => {
-                loading.style.display = "none";
-                loading.innerText = "Cargando...";
-            }, 3000);
-        }
+            
           function mensaje(message, options = {}) {
     const alertBox = document.getElementById("customAlert");
     const alertMessage = document.getElementById("alertMessage");
