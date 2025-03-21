@@ -13,7 +13,6 @@
 <body>
     <h1 id="title">Generador de Vales</h1>
 
-    <div id="reader"><p>Coloca el código QR frente a la cámara</p></div>
     <p id="loading" style="display: none;">Cargando...</p>
     <label for="fileInput" class="custom-file-upload"><i class="fas fa-file-upload"></i> CARGAR EXCEL</label>
     <input type="file" id="fileInput" style="display: none;" />
@@ -37,16 +36,14 @@
     
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-        const html5QrCode = new Html5Qrcode("reader");
         let excelData = [];   
         function toggleView(showCard) {
             document.getElementById("productCard").style.display = showCard ? "block" : "none";
             document.getElementById("infoTitle").style.display = showCard ? "block" : "none";
             document.getElementById("title").style.display = showCard ? "none" : "block";
-            document.getElementById("reader").style.display = showCard ? "none" : "block";
+
             document.querySelector(".custom-file-upload").style.visibility = "hidden";
             document.getElementById("fileInput").style.display = "none";
-           
             document.getElementById("backButton").style.display = showCard ? "block" : "none";
             document.getElementById("listaProductos").style.display = showCard ? "block" : "none";
             document.getElementById("inputObservaciones").style.display = showCard ? "block" : "none";
