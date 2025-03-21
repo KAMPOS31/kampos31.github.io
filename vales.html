@@ -80,9 +80,6 @@
     <button id="backButton" style="display: none;"><i class="fas fa-arrow-left"></i> Regresar</button>
     
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-        let excelData = [];
-        
         function openTab(evt, tabName) {
             $('.tab-content').addClass('hidden');
             $('#' + tabName).removeClass('hidden');
@@ -98,6 +95,9 @@
             alert('Seleccionaste: ' + etiqueta);
         }
         
+        document.addEventListener("DOMContentLoaded", function() {
+        let excelData = [];
+
         function toggleView(showCard) {
             document.getElementById("productCard").style.display = showCard ? "block" : "none";
             document.getElementById("infoTitle").style.display = showCard ? "block" : "none";
