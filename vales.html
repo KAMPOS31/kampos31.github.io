@@ -119,27 +119,22 @@
         let productosEncontrados = [];
         let codigosBuscados = [];
 
-        switch(qrCode){
-            case "OSLIMCAB":
-                codigosBuscados = ["OP-COL-NE", "CERI-SLIM-CABALLERO", "ESTICK-NEG-OPT", "FIT-OPT-SLIM", "PLAST2\"", "45X45C110", "CINTRANS48X150", "CINTRASIV"];
-                break;
-            case "OSKINNYCAB":
-                codigosBuscados = ["OP-COL-NE", "CER-OPT-CAB", "ESTICK-NEG-OPT", "FIT-OPT-SKI", "PLAST2\"", "45X45C110", "CINTRANS48X150", "CINTRASIV"];
-                break;
-            case "ORECTOCAB":
-                codigosBuscados = ["OP-COL-NE", "CERLL-RECTO-CAB", "ESTICK-NEG-OPT", "FIT-OPT-REC", "PLAST2\"", "45X45C110", "CINTRANS48X150", "CINTRASIV"];
-                break;
-            case "OCARGOCAB":
-                codigosBuscados = ["OP-COL-NE", "CER-CARGO-28-36", "ESTICK-NEG-OPT", "FIT-OPT-CARGO", "PLAST2\"", "45X45C110", "CINTRANS48X150", "CINTRASIV"];
-                break;
-            case "OSUPSKINNYCAB":
-                codigosBuscados = ["OP-COL-NE", "CER-SUP-SKINY", "ESTICK-NEG-OPT", "FIT-SUP-SKINNY", "PLAST2\"", "45X45C110", "CINTRANS48X150", "CINTRASIV"];
-                break;
-            default:
-                mensaje("Código QR no válido.", { backgroundColor: "#ffdd99", textColor: "#333333" });
-                return;
-        }
+        const qrMapping = {
+            "OSLIMCAB":["OP-COL-NE", "CERI-SLIM-CABALLERO", "ESTICK-NEG-OPT", "FIT-OPT-SLIM", "PLAST2\"", "45X45C110", "CINTRANS48X150", "CINTRASIV"],
+            "OSKINNYCAB":["OP-COL-NE", "CER-OPT-CAB", "ESTICK-NEG-OPT", "FIT-OPT-SKI", "PLAST2\"", "45X45C110", "CINTRANS48X150", "CINTRASIV"],
+            "ORECTOCAB":["OP-COL-NE", "CERLL-RECTO-CAB", "ESTICK-NEG-OPT", "FIT-OPT-REC", "PLAST2\"", "45X45C110", "CINTRANS48X150", "CINTRASIV"],
+            "OCARGOCAB":["OP-COL-NE", "CER-CARGO-28-36", "ESTICK-NEG-OPT", "FIT-OPT-CARGO", "PLAST2\"", "45X45C110", "CINTRANS48X150", "CINTRASIV"],
+            "OSUPSKINNYCAB":["OP-COL-NE", "CER-SUP-SKINY", "ESTICK-NEG-OPT", "FIT-SUP-SKINNY", "PLAST2\"", "45X45C110", "CINTRANS48X150", "CINTRASIV"]
+};
         
+function procesarQR(qrCode) {
+    if (!qrMapping[qrCode]) {
+        mensaje("Código QR no válido.", { backgroundColor: "#ffdd99", textColor: "#333333" });
+        return;
+    }
+    
+    codigosBuscados = qrMapping[qrCode];
+
         codigosBuscados.forEach(codigo => {
             let producto = excelData.find(item => item["Código"] === codigo);
              document.getElementById("codigo").innerText = qrCode;
@@ -167,6 +162,7 @@
         } else {
             mensaje("No se encontraron productos en el archivo Excel.", { backgroundColor: "#ffdd99", textColor: "#333333" });
         }
+    }
         }
             
 function playScanSound() {
