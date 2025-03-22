@@ -120,23 +120,18 @@
             "ORECTOCAB":["OP-COL-NE", "CERLL-RECTO-CAB", "ESTICK-NEG-OPT", "FIT-OPT-REC", "PLAST2\"", "45X45C110", "CINTRANS48X150", "CINTRASIV"],
             "OCARGOCAB":["OP-COL-NE", "CER-CARGO-28-36", "ESTICK-NEG-OPT", "FIT-OPT-CARGO", "PLAST2\"", "45X45C110", "CINTRANS48X150", "CINTRASIV"],
             "OSUPSKINNYCAB":["OP-COL-NE", "CER-SUP-SKINY", "ESTICK-NEG-OPT", "FIT-SUP-SKINNY", "PLAST2\"", "45X45C110", "CINTRANS48X150", "CINTRASIV"]
-};
+        };
+
 
         function searchProduct(qrCode) {
-        let contador = 1; // Iniciar el contador en 1
-        let productosEncontrados = [];
-        let codigosBuscados = [];
-
-        procesarQR(qrCode);
-        }
-
-        function procesarQR(qrCode) {
-    if (!qrMapping[qrCode]) {
+        if (!qrMapping[qrCode]) {
         mensaje("Código QR no válido.", { backgroundColor: "#ffdd99", textColor: "#333333" });
         return;
     }
     
-    codigosBuscados = qrMapping[qrCode];
+        let contador = 1; // Iniciar el contador en 1
+        let productosEncontrados = [];
+        let codigosBuscados = qrMapping[qrCode];
 
         codigosBuscados.forEach(codigo => {
             let producto = excelData.find(item => item["Código"] === codigo);
@@ -164,9 +159,9 @@
             toggleView(true);
         } else {
             mensaje("No se encontraron productos en el archivo Excel.", { backgroundColor: "#ffdd99", textColor: "#333333" });
+        }   
         }
-    }
-            
+
 function playScanSound() {
     const audio = new Audio("https://github.com/KAMPOS31/kampos31.github.io/raw/refs/heads/main/beep.mp3"); // URL del archivo en línea
     audio.play().catch(err => {
