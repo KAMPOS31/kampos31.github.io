@@ -322,8 +322,7 @@ function generarPDF() {
 
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
-    const valeWidth = (pageWidth / 2) - 15; // Mitad de la página con márgenes
-    const valeHeight = pageHeight - 20; // Alto del vale
+   
     const logoUrl = "https://raw.githubusercontent.com/KAMPOS31/kampos31.github.io/main/Imagen1.jpg";
 
      // Obtener y actualizar folio
@@ -345,11 +344,26 @@ function generarPDF() {
             productos.push({ descripcion, cantidad });
         }
     });
-    
-    function agregarVale(xOffset, yOffset){
+    const seccion = document.getElementById("inputSeccion").value || "N/A";
+    const observaciones = document.getElementById("inputObservaciones").value || "N/A";
+
+    function agregarVale(xOffset, yOffset,valeWidth,valeHeight,rotado = false){
+
+          if (rotado) {
+            doc.saveGraphicsState();
+            doc.translate(xOffset + valeHeight, yOffset);
+            doc.rotate(90);
+            xOffset = 0;
+            yOffset = 0;
+        }
+
         doc.setDrawColor(150, 0, 50);
         doc.setLineWidth(1);
     doc.rect(xOffset, yOffset, valeWidth, valeHeight); // Borde del vale
+
+      if (!rotado) {
+            doc.addImage(logoUrl, "JPEG", xOffset + 10, yOffset + 10, 40, 20);
+        }
 
         doc.setFontSize(16);
         doc.setFont('helvetica', 'bold');
@@ -435,6 +449,9 @@ doc.text('ENTREGÓ', xOffset + 27, yOffset + valeHeight - 15);
 // Línea para "RECIBIÓ"
 doc.line(xOffset + valeWidth - 70, yOffset + valeHeight - 20, xOffset + valeWidth - 30, yOffset + valeHeight - 20);
 doc.text('RECIBIÓ', xOffset + valeWidth - 57, yOffset + valeHeight - 15);
+  if (rotado) {
+            doc.restoreGraphicsState();
+        }
     }
 
     // Cargar la imagen antes de generar el PDF
@@ -443,8 +460,11 @@ doc.text('RECIBIÓ', xOffset + valeWidth - 57, yOffset + valeHeight - 15);
     img.crossOrigin = "Anonymous";
     img.onload = function () {
         doc.addImage(img, "JPEG", 10, 10, 40, 20); // (x, y, ancho, alto)
-        agregarVale(10, 10); // Vale izquierdo
-agregarVale(pageWidth / 2 + 5, 10); // Vale derecho
+
+        agregarVale(10, 10, 90, 190);
+        // Dos vales horizontales a la derecha
+        agregarVale(110, 10, 90, 130, true);  // Superior derecho
+        agregarVale(200, 10, 90, 130, true);  // Inferior derecho
 doc.save('Vale_Almacen.pdf');
          const alertBox = document.getElementById("customAlert2");
         alertBox.style.display = "none";
@@ -457,8 +477,10 @@ doc.save('Vale_Almacen.pdf');
 
     img.onerror = function () {
         console.error("No se pudo cargar el logo.");
-        agregarVale(10, 10); // Vale izquierdo
-agregarVale(pageWidth / 2 + 5, 10); // Vale derecho
+      agregarVale(10, 10, 90, 190);
+        // Dos vales horizontales a la derecha
+        agregarVale(110, 10, 90, 130, true);  // Superior derecho
+        agregarVale(200, 10, 90, 130, true);  // Inferior derecho
 doc.save('Vale_Almacen.pdf');
     };
 }
