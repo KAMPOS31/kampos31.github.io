@@ -20,17 +20,17 @@
     <div id="infoTitle"><i class="fas fa-info-circle"></i> Información del Producto</div>
    
     <div id="productCard" class="card" style="display: none;">
-    <button id="generateExcelButton" style="display: none;"><i class="fas fa-download"></i> Generar Excel</button>
+    <button id="generateExcelButton" style="display: none; margin: 0 auto;"><i class="fas fa-download"></i> Generar Excel</button>
     <h2 id="descripcion"></h2><br>
     <p><strong>Código:</strong><br><span id="codigo"></span></p>
     <p><strong>Categoría:</strong><br><span id="categoria"></span></p>
     <p><strong>Costo Unitario:</strong><br><span id="costo"></span></p>
-    <p><strong>Cantidad:</strong><br><span id="cantidad"></span></p>
-    <p><button id="editButton"><i class="fas fa-edit"></i> Editar</button></p>
+    <p><strong>Cantidad:</strong><br><input type="number" id="cantidadInput" value="" disabled/> 
+        <button id="editButton"><i class="fas fa-edit"></i> Editar</button></p>
     <p><strong>Proveedor:</strong><br><span id="proveedor"></span></p>
     <p><strong>Total:</strong><br><span id="total"></span></p>
-        <button id="saveButton" style="display: none;"><i class="fas fa-save"></i> Guardar</button>
-        <button id="cancelButton" style="display: none;"><i class="fas fa-times"></i> Cancelar</button>
+    <button id="saveButton" style="display: none;"><i class="fas fa-save"></i> Guardar Cambios</button>
+    <button id="cancelButton" style="display: none;"><i class="fas fa-times"></i> Cancelar</button>
 </div>
 
     <button id="backButton" style="display: none;"><i class="fas fa-arrow-left"></i> Regresar</button>
@@ -39,7 +39,7 @@
         document.addEventListener("DOMContentLoaded", function() {
         const html5QrCode = new Html5Qrcode("reader");
         let excelData = [];
-            let currentProduct = null;
+        let currentProduct = null;
             
         function toggleView(showCard) {
             document.getElementById("productCard").style.display = showCard ? "block" : "none";
@@ -85,7 +85,11 @@
         alertBox.style.display = "none";
     };
 }   
-            
+        function validateExcelColumns(data) {
+            const requiredColumns = ["Código", "Categoría", "Descripción", "Costo", "Cantidad", "Proveedor", "$ Total"];
+            return requiredColumns.every(column => column in data[0]);
+        }
+
         document.getElementById("fileInput").addEventListener("change", function(event) {
             const file = event.target.files[0];
             const reader = new FileReader();
@@ -96,6 +100,14 @@
                 const sheetName = workbook.SheetNames[0];
                 const worksheet = workbook.Sheets[sheetName];
                 excelData = XLSX.utils.sheet_to_json(worksheet);
+
+                if (!validateExcelColumns(excelData)) {
+                    mensaje("Archivo inválido. Verifica el formato.", {
+            backgroundColor: "#f8d7da", // Fondo rojo claro
+            textColor: "#721c24",      // Texto rojo oscuro
+        });
+                    excelData = [];
+                }
             };
 
             reader.readAsArrayBuffer(file);
@@ -108,12 +120,12 @@
                 document.getElementById("codigo").innerText = product["Código"];
                 document.getElementById("descripcion").innerText = product["Descripción"];
                 document.getElementById("proveedor").innerText = product["Proveedor"];
-                 document.getElementById("cantidad").innerText = product["Cantidad"];
+                 document.getElementById("cantidadInput").value = product["Cantidad"];
                 document.getElementById("costo").innerText = formatter.format(product["Costo"]);
         document.getElementById("categoria").innerText = product["Categoría"];
         document.getElementById("total").innerText = formatter.format(product["$ Total"]);
             
-                    //currentProduct = product;
+                currentProduct = product;
                 toggleView(true);
             } else {
             mensaje("Producto no encontrado.", {
@@ -136,7 +148,7 @@
         const newQuantity = document.getElementById("cantidadInput").value;
 
         // Validar que la cantidad no esté vacía o inválida
-        if (newQuantity && !isNaN(newQuantity)&& Number(newQuantity) >= 0) {
+        if (newQuantity && !isNaN(newQuantity)) {
             currentProduct["Cantidad"] = parseInt(newQuantity); // Actualizar el valor de cantidad
             document.getElementById("cantidadInput").innerText = newQuantity.toLocaleString(); // Actualizar en la tarjeta
             document.getElementById("saveButton").style.display = "none";
@@ -145,7 +157,7 @@
             document.getElementById("cantidadInput").disabled = true;
 
             // Mostrar el botón para generar el nuevo Excel
-            document.getElementById("generateExcelButton").style.cssText = "display: block; margin: 0 auto;";
+            document.getElementById("generateExcelButton").style.display = "inline-block";
         } else {
             mensaje("Por favor, ingresa una cantidad válida.", {
                 backgroundColor: "#f8d7da", // Fondo rojo claro
@@ -162,7 +174,7 @@
         document.getElementById("editButton").style.display = "inline-block";
         document.getElementById("cantidadInput").disabled = true;
     });
-            
+
     // Generar el archivo Excel actualizado
     document.getElementById("generateExcelButton").addEventListener("click", function() {
         // Convertir los datos modificados a una hoja de Excel
