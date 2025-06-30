@@ -85,10 +85,10 @@
         alertBox.style.display = "none";
     };
 }   
-        function validateExcelColumns(data) {
+        /*function validateExcelColumns(data) {
             const requiredColumns = ["Código", "Categoría", "Descripción", "Costo", "Cantidad", "Proveedor", "$ Total"];
             return requiredColumns.every(column => column in data[0]);
-        }
+        }*/
 
         document.getElementById("fileInput").addEventListener("change", function(event) {
             const file = event.target.files[0];
@@ -100,14 +100,16 @@
                 const sheetName = workbook.SheetNames[0];
                 const worksheet = workbook.Sheets[sheetName];
                 excelData = XLSX.utils.sheet_to_json(worksheet);
-
-                if (!validateExcelColumns(excelData)) {
+                excelData = [];
+                
+                /*if (!validateExcelColumns(excelData)) {
                     mensaje("Archivo inválido. Verifica el formato.", {
             backgroundColor: "#f8d7da", // Fondo rojo claro
             textColor: "#721c24",      // Texto rojo oscuro
         });
-                    excelData = [];
-                }
+                    
+                }*/
+                
             };
 
             reader.readAsArrayBuffer(file);
